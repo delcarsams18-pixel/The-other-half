@@ -7,7 +7,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build TheOtherHalf
+      - name: Build Win64
         shell: cmd
         run: |
-          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=Win64 -clientconfig=Shipping -build -skipcook -skipstage -skipPackaging -noP4 -utf8output -unattended
+          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=Win64 -clientconfig=Shipping -build -skipcook -skipstage -skipPackaging -noP4 -utf8output
