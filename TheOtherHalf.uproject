@@ -1,13 +1,30 @@
-{
-  "FileVersion": 3,
-  "EngineAssociation": "5.5",
-  "Category": "",
-  "Description": "THE OTHER HALF - FENWAY CITY",
-  "Modules": [
-    {
-      "Name": "TheOtherHalf",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
-    }
-  ]
-}
+name: TheOtherHalf - All Platforms
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-win:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - shell: cmd
+        run: |
+          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=Win64 -clientconfig=Shipping -build -cook -stage -pak -archive -archivedirectory="%GITHUB_WORKSPACE%\dist\Win64" -map=/Engine/Maps/Empty -noP4
+
+  build-ps5:
+    runs-on: windows-latest
+    if: false  # turn to true AFTER you have PlayStation Partners access
+    steps:
+      - uses: actions/checkout@v4
+      - shell: cmd
+        run: |
+          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=PS5 -clientconfig=Shipping -build -cook -stage -pak -archive -archivedirectory="%GITHUB_WORKSPACE%\dist\PS5" -map=/Engine/Maps/Empty -noP4
+
+  build-xbox:
+    runs-on: windows-latest
+    if: false  # turn to true AFTER you have GDN access
+    steps:
+      - uses: actions/checkout@v4
+      - shell: cmd
+        run: |
+          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=XSX -clientconfig=Shipping -build -cook -stage -pak -archive -archivedirectory="%GITHUB_WORKSPACE%\dist\XSX" -map=/Engine/Maps/Empty -noP4
