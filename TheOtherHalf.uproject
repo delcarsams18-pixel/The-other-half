@@ -1,7 +1,13 @@
-[/Script/EngineSettings.GameMapsSettings]
-EditorStartupMap=/Engine/Maps/Empty.Empty
-GameDefaultMap=/Engine/Maps/Empty.Empty
-GlobalDefaultGameType=/Script/Engine.GameModeBase
-
-[/Script/Engine.RendererSettings]
-r.Nanite.ProjectEnabled=1
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.5",
+  "Category": "",
+  "Description": "THE OTHER HALF - FENWAY CITY",
+  "Modules": [
+    {
+      "Name": "TheOtherHalf",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
