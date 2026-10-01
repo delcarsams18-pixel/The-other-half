@@ -1,4 +1,16 @@
-"Plugins": [
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.5",
+  "Category": "",
+  "Description": "",
+  "Modules": [
+    {
+      "Name": "TheOtherHalf",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
     {
       "Name": "USDImporter",
       "Enabled": false
@@ -24,3 +36,7 @@
       "Enabled": false
     }
   ],
+  "TargetPlatforms": [
+    "Windows"
+  ]
+}
