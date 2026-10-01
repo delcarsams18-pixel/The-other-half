@@ -1,13 +1,10 @@
 using UnrealBuildTool;
-using System.Collections.Generic;
-
-public class TheOtherHalfTarget : TargetRules
+public class TheOtherHalf : ModuleRules
 {
-	public TheOtherHalfTarget(TargetInfo Target) : base(Target)
-	{
-		Type = TargetType.Game;
-		DefaultBuildSettings = BuildSettingsVersion.V5;
-		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
-		ExtraModuleNames.Add("TheOtherHalf");
-	}
+  public TheOtherHalf(ReadOnlyTargetRules Target) : base(Target)
+  {
+    PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+    PrivateDependencyModuleNames.AddRange(new string[] { "MassAI", "MassCrowd", "PCG", "UMG" });
+  }
 }
