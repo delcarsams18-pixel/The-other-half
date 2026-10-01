@@ -1,11 +1,9 @@
 using UnrealBuildTool;
-public class TheOtherHalfTarget : TargetRules
+public class TheOtherHalf : ModuleRules
 {
-  public TheOtherHalfTarget(TargetInfo Target) : base(Target)
+  public TheOtherHalf(ReadOnlyTargetRules Target) : base(Target)
   {
-    Type = TargetType.Game;
-    DefaultBuildSettings = BuildSettingsVersion.V5;
-    IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_5;
-    ExtraModuleNames.Add("TheOtherHalf");
+    PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+    PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
   }
 }
