@@ -7,3 +7,6 @@
   "Plugins": [{ "Name": "ModelingToolsEditorMode", "Enabled": true }],
   "TargetPlatforms": ["Windows", "PS5", "XSX"]
 }
+git add .
+git commit -m "Generate targets for cloud build"
+git push
