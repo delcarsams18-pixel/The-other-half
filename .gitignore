@@ -1,18 +1,7 @@
-# Unreal generated
 Binaries/
 Intermediate/
 Saved/
 DerivedDataCache/
-Build/
-# VS
 .vs/
 *.VC.db
-*.opensdf
 *.opendb
-*.sdf
-*.suo
-*.xcodeproj
-*.xcworkspace
-# OS
-.DS_Store
-Thumbs.db
