@@ -1,12 +1,13 @@
 {
-  "FileVersion": 3,
-  "EngineAssociation": "5.5",
-  "Category": "",
-  "Description": "THE OTHER HALF - FENWAY CITY MO - GET HER BACK - 7 heroes vs 7 villains",
-  "Modules": [{ "Name": "TheOtherHalf", "Type": "Runtime", "LoadingPhase": "Default" }],
-  "Plugins": [{ "Name": "ModelingToolsEditorMode", "Enabled": true }],
-  "TargetPlatforms": ["Windows", "PS5", "XSX"]
+	"FileVersion": 3,
+	"EngineAssociation": "5.5",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "TheOtherHalf",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
 }
-git add .
-git commit -m "Generate targets for cloud build"
-git push
