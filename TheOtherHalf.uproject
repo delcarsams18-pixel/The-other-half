@@ -9,5 +9,11 @@
       "Type": "Runtime",
       "LoadingPhase": "Default"
     }
+  ],
+  "Plugins": [
+    { "Name": "USDImporter", "Enabled": false },
+    { "Name": "USDExporter", "Enabled": false },
+    { "Name": "UniversalSceneDescription", "Enabled": false },
+    { "Name": "Usd", "Enabled": false }
   ]
 }
