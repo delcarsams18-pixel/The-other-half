@@ -12,6 +12,10 @@
   ],
   "Plugins": [
     {
+      "Name": "USDCore",
+      "Enabled": false
+    },
+    {
       "Name": "USDImporter",
       "Enabled": false
     },
@@ -35,8 +39,5 @@
       "Name": "USDEditor",
       "Enabled": false
     }
-  ],
-  "TargetPlatforms": [
-    "Windows"
   ]
 }
