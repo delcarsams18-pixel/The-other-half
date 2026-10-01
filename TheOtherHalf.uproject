@@ -1,43 +1,30 @@
-{
-  "FileVersion": 3,
-  "EngineAssociation": "5.5",
-  "Category": "",
-  "Description": "",
-  "Modules": [
-    {
-      "Name": "TheOtherHalf",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
-    }
-  ],
-  "Plugins": [
-    {
-      "Name": "USDCore",
-      "Enabled": false
-    },
-    {
-      "Name": "USDImporter",
-      "Enabled": false
-    },
-    {
-      "Name": "USDSchemas",
-      "Enabled": false
-    },
-    {
-      "Name": "UnrealUSD",
-      "Enabled": false
-    },
-    {
-      "Name": "USDStageImporter",
-      "Enabled": false
-    },
-    {
-      "Name": "USDStage",
-      "Enabled": false
-    },
-    {
-      "Name": "USDEditor",
-      "Enabled": false
-    }
-  ]
-}
+"Plugins": [
+  {
+    "Name": "USDCore",
+    "Enabled": true
+  },
+  {
+    "Name": "USDImporter",
+    "Enabled": true
+  },
+  {
+    "Name": "USDSchemas",
+    "Enabled": true
+  },
+  {
+    "Name": "UnrealUSD",
+    "Enabled": true
+  },
+  {
+    "Name": "USDStageImporter",
+    "Enabled": true
+  },
+  {
+    "Name": "USDStage",
+    "Enabled": true
+  },
+  {
+    "Name": "USDEditor",
+    "Enabled": true
+  }
+]
