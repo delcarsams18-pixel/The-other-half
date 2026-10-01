@@ -3,17 +3,10 @@
   "EngineAssociation": "5.5",
   "Category": "",
   "Description": "THE OTHER HALF - FENWAY CITY",
-  "Modules": [
-    {
-      "Name": "TheOtherHalf",
-      "Type": "Runtime",
-      "LoadingPhase": "Default"
-    }
-  ],
+  "Modules": [{ "Name": "TheOtherHalf", "Type": "Runtime", "LoadingPhase": "Default" }],
   "Plugins": [
     { "Name": "USDImporter", "Enabled": false },
     { "Name": "USDExporter", "Enabled": false },
-    { "Name": "UniversalSceneDescription", "Enabled": false },
-    { "Name": "Usd", "Enabled": false }
+    { "Name": "UniversalSceneDescription", "Enabled": false }
   ]
 }
