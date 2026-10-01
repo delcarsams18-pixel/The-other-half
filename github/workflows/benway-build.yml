@@ -1,24 +1,17 @@
-name: TheOtherHalf - Unreal Cloud Build
-
+name: TheOtherHalf - Build
 on:
   push:
     branches: [ main ]
-
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build Cook Run - TheOtherHalf
+      - uses: actions/checkout@v4
+      - name: Build TheOtherHalf
         shell: cmd
         run: |
-          echo Building TheOtherHalf.uproject...
-          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=Win64 -targetplatform=Win64 -clientconfig=Shipping -build -cook -stage -pak -archive -archivedirectory="%GITHUB_WORKSPACE%\dist" -allmaps -utf8output -noP4 -unattended
-
-      - name: Upload Dist
-        uses: actions/upload-artifact@v4
+          "C:\opt\ue\5.5.4\Engine\Build\BatchFiles\RunUAT.bat" BuildCookRun -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -platform=Win64 -clientconfig=Shipping -build -cook -stage -pak -archive -archivedirectory="%GITHUB_WORKSPACE%\dist" -map=/Engine/Maps/Empty -utf8output -noP4
+      - uses: actions/upload-artifact@v4
         with:
           name: TheOtherHalf-Win64-Shipping
           path: dist/
