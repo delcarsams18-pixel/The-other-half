@@ -1,0 +1,12 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.5",
+  "Description": "THE OTHER HALF - FENWAY CITY",
+  "Modules": [
+    {
+      "Name": "TheOtherHalf",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
