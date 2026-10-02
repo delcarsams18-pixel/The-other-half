@@ -11,4 +11,4 @@ jobs:
         shell: cmd
         run: |
           "C:\opt\ue\5.5.4\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" TheOtherHalfEditor Win64 Development -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -WaitMutex -FromMsBuild
-          "C:\opt\ue\5.6\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" TheOtherHalf Win64 Shipping -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -WaitMutex -FromMsBuild
+          "C:\opt\ue\5.5.4\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" TheOtherHalf Win64 Shipping -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -WaitMutex -FromMsBuild
