@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.4",
+	"Category": "",
+	"Description": "The Other Half - Benway City - 【entity-Xbox¦canonical_name=Xbox】 + Windows only (no Android)",
+	"Modules": [
+		{
+			"Name": "TheOtherHalf",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"TargetPlatforms": ["WindowsNoEditor", "XboxOneGDK"],
+	"Platforms": [
+		{
+			"Name": "Windows",
+			"IsEnabled": true
+		},
+		{
+			"Name": "XboxOneGDK",
+			"IsEnabled": true
+		}
+	]
+}
