@@ -1,8 +1,8 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "5.4",
+	"EngineAssociation": "5.5",
 	"Category": "",
-	"Description": "The Other Half - Benway City - 【entity-Xbox¦canonical_name=Xbox】 + Windows only (no Android)",
+	"Description": "The Other Half - Benway City 1000km - Xbox + Windows only",
 	"Modules": [
 		{
 			"Name": "TheOtherHalf",
@@ -11,14 +11,26 @@
 		}
 	],
 	"TargetPlatforms": ["WindowsNoEditor", "XboxOneGDK"],
-	"Platforms": [
+	"Plugins": [
 		{
-			"Name": "Windows",
-			"IsEnabled": true
+			"Name": "USDImporter",
+			"Enabled": false
 		},
 		{
-			"Name": "XboxOneGDK",
-			"IsEnabled": true
+			"Name": "UsdExporter",
+			"Enabled": false
+		},
+		{
+			"Name": "PythonUSD",
+			"Enabled": false
+		},
+		{
+			"Name": "XRPassthrough",
+			"Enabled": false
+		},
+		{
+			"Name": "OpenImageDenoise",
+			"Enabled": false
 		}
 	]
 }
