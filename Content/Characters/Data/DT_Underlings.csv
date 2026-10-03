@@ -1,0 +1,28 @@
+VillainID,UnderlingID,Tier,Name,Looks,Weapon,SideQuestTrigger
+THE_WARDEN,WARDEN_T1,1,Prison Drone,Grey plastic armor no lightning,Taser Stick,Free 10 prisoners
+THE_WARDEN,WARDEN_T2,2,Shock Warden,White riot gear cracked helmet,Stun Rifle,Shut down cell block power
+THE_WARDEN,WARDEN_T3,3,Iron Cell Captain,Black iron plates no blue glow,Heavy Baton,Steal Warden key
+
+NEON_QUEEN,NEON_T1,1,Holo Doll,Pink hologram glitch no crown,Holo Knife,Save glitched dancers
+NEON_QUEEN,NEON_T2,2,Pulse Siren,Red latex no halo,Neon Whip,Break red light towers
+NEON_QUEEN,NEON_T3,3,Neon Enforcer,Tall black suit pink visor,Laser Fans,Get Queen's other half chip
+
+RUST_FATHER,RUST_T1,1,Scrap Rat,Rusty rags no goggles,Wrench
+RUST_FATHER,RUST_T2,2,Scrap Welder,Leather apron sparking mask,Flame Torch
+RUST_FATHER,RUST_T3,3,Junk Golem,Pile of cars with face,Cannon Arm
+
+THE_CHEMIST,CHEM_T1,1,Green Fiend,White mask no vials,Green Needle
+THE_CHEMIST,CHEM_T2,2,Vial Carrier,Green backpack leaking,Gas Sprayer
+THE_CHEMIST,CHEM_T3,3,Herb Abomination,Plant man fused with beakers,Acid Throw
+
+HOUND_MASTER,HOUND_T1,1,Metal Pup,Small dog bot blue eye,Bite
+HOUND_MASTER,HOUND_T2,2,Chain Hound,Medium dog chain leash,Chain Pull
+HOUND_MASTER,HOUND_T3,3,Alpha Dog Tank,Big tank dog green core,Howl Stun
+
+BLADE_MOTHER,BLADE_T1,1,Blade Acolyte,White hair grey robe no swords,Small Dagger
+BLADE_MOTHER,BLADE_T2,2,Blade Sister,Black leather white hair one sword,Blue Blade
+BLADE_MOTHER,BLADE_T3,3,Blade Matriarch,Long white hair cape two swords,Twin Blades
+
+THE_OVERLORD,OVERLORD_T1,1,Cage Keeper,Hooded no cage,Baton
+THE_OVERLORD,OVERLORD_T2,2,Pulse Thief,Black armor cage backpack,Steal Pulse
+THE_OVERLORD,OVERLORD_T3,3,Other Half Clone,Your face but corrupted,Same as you
