@@ -12,3 +12,10 @@ jobs:
         run: |
           "C:\opt\ue\5.5.4\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" TheOtherHalfEditor Win64 Development -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -WaitMutex -FromMsBuild
           "C:\opt\ue\5.5.4\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" TheOtherHalf Win64 Shipping -project="%GITHUB_WORKSPACE%\TheOtherHalf.uproject" -WaitMutex -FromMsBuild
+      - name: Kill broken USD on runner
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force "C:\opt\ue\5.5.4\Engine\Plugins\Importers\USDImporter" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "C:\opt\ue\5.5.4\Engine\Plugins\Importers\USD" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "C:\opt\ue\5.5.4\Engine\Plugins\Enterprise\USD" -ErrorAction SilentlyContinue
+          Write-Host "USD deleted from runner"
