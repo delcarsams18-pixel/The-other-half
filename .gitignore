@@ -1,19 +1,16 @@
-# Don't track Android at all
+# 【entity-Xbox¦canonical_name=Xbox】 + Windows only - blocks Android that broke first 3 builds
 /Platform/Android/
 **/AndroidManifest.xml
 **/*.obb
 **/*.apk
 Build/Android/
 
-# Unreal junk that breaks GitHub when you edit main line
 Binaries/
 Intermediate/
 Saved/
 DerivedDataCache/
-Binaries/*
-/Build/
+Build/
 
-# Keep these - DON'T ignore
 !Content/
 !Config/
 !Source/
