@@ -1,6 +1,6 @@
 {
   "FileVersion": 3,
   "EngineAssociation": "5.5",
-  "Modules": [{ "Name": "TOH", "Type": "Runtime" }],
+  "Modules": [{ "Name": "TOH", "Type": "Runtime", "LoadingPhase": "Default" }],
   "Plugins": [{ "Name": "USDImporter", "Enabled": false }]
 }
