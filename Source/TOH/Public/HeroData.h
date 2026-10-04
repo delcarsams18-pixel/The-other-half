@@ -3,7 +3,7 @@
 #include "HeroData.generated.h"
 
 USTRUCT(BlueprintType)
-struct FUnder
+struct FTOHUnder
 {
     GENERATED_BODY()
     UPROPERTY(BlueprintReadWrite) FString Level;
@@ -14,7 +14,7 @@ struct FUnder
 };
 
 USTRUCT(BlueprintType)
-struct FHero
+struct FTOHHero
 {
     GENERATED_BODY()
     UPROPERTY(BlueprintReadWrite) FString Id;
@@ -25,5 +25,5 @@ struct FHero
     UPROPERTY(BlueprintReadWrite) FString A2;
     UPROPERTY(BlueprintReadWrite) FString A3;
     UPROPERTY(BlueprintReadWrite) FString Note;
-    UPROPERTY(BlueprintReadWrite) TArray<FUnder> Unders;
+    UPROPERTY(BlueprintReadWrite) TArray<FTOHUnder> Unders;
 };
