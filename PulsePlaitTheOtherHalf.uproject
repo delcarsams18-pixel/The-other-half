@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.5.4",
+  "Category": "",
+  "Description": "PULSE PLAIT: THE OTHER HALF - BENWAY MISSOURI YEAR 2526 - Lonzo + Carrie duo - 500 years from rubble after 【entity-Trump¦canonical_name=Donald Trump】 failed policies",
+  "Modules": [
+    {
+      "Name": "PulsePlaitTheOtherHalf",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
