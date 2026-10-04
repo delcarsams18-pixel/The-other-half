@@ -1,4 +1,4 @@
-#include "Master.h"
+#include "Hero.h"
 AHero::AHero(){ PrimaryActorTick.bCanEverTick = false; }
 void AHero::BeginPlay(){ Super::BeginPlay(); }
 void AHero::Use1() {}
