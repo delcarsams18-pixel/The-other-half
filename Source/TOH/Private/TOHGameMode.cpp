@@ -1,4 +1,4 @@
-#include "Master.h"
+#include "Hero.h"
 ATOHGameMode::ATOHGameMode(){ DefaultPawnClass = nullptr; }
 void ATOHGameMode::Load()
 {
