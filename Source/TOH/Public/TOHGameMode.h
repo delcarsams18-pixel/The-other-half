@@ -10,6 +10,6 @@ class TOH_API ATOHGameMode : public AGameModeBase
     GENERATED_BODY()
 public:
     ATOHGameMode();
-    UPROPERTY(EditAnywhere,BlueprintReadWrite) TArray<FHero> AllHeroes;
+    UPROPERTY(EditAnywhere,BlueprintReadWrite) TArray<FTOHHero> AllHeroes;
     UFUNCTION(BlueprintCallable) void Load();
 };
