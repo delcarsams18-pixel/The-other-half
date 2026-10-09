@@ -1,4 +1,6 @@
 #include "TOHCharacter.h"
+#include "Engine/StaticMeshActor.h"
+#include "EngineUtils.h"
 #include "TOHProjectile.h"
 #include "TOHGLBLoader.h"
 #include "LonzoMeshData.h"
@@ -142,17 +144,26 @@ void ATOHCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    // Check for health pickups
-    TArray<AActor*> Overlapping;
-    GetOverlappingActors(Overlapping, AStaticMeshActor::StaticClass());
-    for (AActor* Actor : Overlapping)
+    // Check for health pickups (distance-based)
+    if (Health < MaxHealth)
     {
-        if (Actor && Actor->ActorHasTag(FName("HealthPickup")))
+        UWorld* W = GetWorld();
+        if (W)
         {
-            if (Health < MaxHealth)
+            FVector MyLoc = GetActorLocation();
+            for (TActorIterator<AStaticMeshActor> It(W); It; ++It)
             {
-                Health = FMath::Min(MaxHealth, Health + 30.0f);
-                Actor->Destroy();
+                AStaticMeshActor* SMA = *It;
+                if (SMA && SMA->ActorHasTag(FName("HealthPickup")))
+                {
+                    float Dist = FVector::Dist(MyLoc, SMA->GetActorLocation());
+                    if (Dist < 150.0f)
+                    {
+                        Health = FMath::Min(MaxHealth, Health + 30.0f);
+                        SMA->Destroy();
+                        break;
+                    }
+                }
             }
         }
     }
