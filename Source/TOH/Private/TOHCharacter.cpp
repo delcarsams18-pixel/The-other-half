@@ -112,7 +112,7 @@ void ATOHCharacter::BeginPlay()
             Vertices.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f));
             Normals.Add(FVector(0, 0, 1));
             UVs.Add(FVector2D(0, 0));
-            Colors.Add(FLinearColor::White);
+            Colors.Add(FLinearColor(0.15f, 0.2f, 0.3f));
             Tangents.Add(FProcMeshTangent(1, 0, 0));
         }
         int32 NumIdx = sizeof(Lonzo_Indices) / sizeof(uint32);
