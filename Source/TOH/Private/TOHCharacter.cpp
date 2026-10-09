@@ -3,7 +3,6 @@
 #include "TOHGLBLoader.h"
 #include "LonzoMeshData.h"
 #include "Materials/Material.h"
-#include "MaterialShared.h"
 #include "ProceduralMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -120,11 +119,6 @@ void ATOHCharacter::BeginPlay()
             Triangles.Add((int32)Lonzo_Indices[i]);
         }
         LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
-        UMaterial* BaseMat = UMaterial::GetDefaultMaterial(EMaterialDomain::MD_Surface);
-        if (BaseMat)
-        {
-            LonzoModel->SetMaterial(0, BaseMat);
-        }
         LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
         if (BodyMesh)
         {
