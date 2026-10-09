@@ -41,6 +41,30 @@ ATOHCharacter::ATOHCharacter()
     }
     ArmCannon->SetupAttachment(GetMesh());
 
+    GunBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunBody"));
+    GunBarrel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunBarrel"));
+    GunGrip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunGrip"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> BoxMesh(TEXT("/Engine/BasicShapes/Cube"));
+    if (BoxMesh.Succeeded())
+    {
+        GunBody->SetStaticMesh(BoxMesh.Object);
+        GunBody->SetRelativeScale3D(FVector(0.15f, 0.5f, 0.25f));
+        GunBody->SetRelativeLocation(FVector(35.0f, 30.0f, 100.0f));
+        GunBody->SetupAttachment(GetMesh());
+
+        GunBarrel->SetStaticMesh(CannonMesh.Object);
+        GunBarrel->SetRelativeScale3D(FVector(0.08f, 0.08f, 0.6f));
+        GunBarrel->SetRelativeLocation(FVector(35.0f, 30.0f, 105.0f));
+        GunBarrel->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f));
+        GunBarrel->SetupAttachment(GetMesh());
+
+        GunGrip->SetStaticMesh(BoxMesh.Object);
+        GunGrip->SetRelativeScale3D(FVector(0.12f, 0.15f, 0.35f));
+        GunGrip->SetRelativeLocation(FVector(35.0f, 22.0f, 85.0f));
+        GunGrip->SetRelativeRotation(FRotator(15.0f, 0.0f, 0.0f));
+        GunGrip->SetupAttachment(GetMesh());
+    }
+
     BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
     static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMeshAsset(TEXT("/Engine/BasicShapes/Cube"));
     if (BodyMeshAsset.Succeeded())
