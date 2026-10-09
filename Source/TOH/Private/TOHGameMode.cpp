@@ -2,6 +2,7 @@
 #include "TOHCharacter.h"
 #include "TOHEnemy.h"
 #include "TOHProjectile.h"
+#include "TOHCarrieHologram.h"
 #include "TOHHUD.h"
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
@@ -132,20 +133,7 @@ void ATOHGameMode::SpawnCarrieMarker()
     UWorld* World = GetWorld();
     if (!World) return;
 
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube"));
-    if (!CubeMesh.Succeeded()) return;
-
-    CarrieMarker = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector(0, 0, 150), FRotator::ZeroRotator);
-    UStaticMeshComponent* Comp = CarrieMarker->GetStaticMeshComponent();
-    Comp->SetStaticMesh(CubeMesh.Object);
-    Comp->SetWorldScale3D(FVector(2.0f, 2.0f, 4.0f));
-    UMaterialInstanceDynamic* Mat = Comp->CreateDynamicMaterialInstance(0);
-    if (Mat)
-    {
-        Mat->SetVectorParameterValue(TEXT("EmissiveColor"), FLinearColor(0.6f, 0.2f, 1.0f));
-        Mat->SetScalarParameterValue(TEXT("EmissiveIntensity"), 5.0f);
-    }
-    CarrieMarker->Tags.Add(TEXT("Carrie"));
+    CarrieMarker = World->SpawnActor<ATOHCarrieHologram>(ATOHCarrieHologram::StaticClass(), FVector(0, 0, 150), FRotator::ZeroRotator);
 }
 
 void ATOHGameMode::OnEnemyKilled()
