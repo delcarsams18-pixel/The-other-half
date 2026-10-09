@@ -57,6 +57,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UStaticMeshComponent* ArmCannon;
 
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
+    class UStaticMeshComponent* BodyMesh;
+
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
 
