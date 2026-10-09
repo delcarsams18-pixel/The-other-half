@@ -46,7 +46,7 @@ protected:
     void CheckWinLose();
 
     UPROPERTY()
-    class AStaticMeshActor* CarrieMarker = nullptr;
+    class ATOHCarrieHologram* CarrieMarker = nullptr;
 
     UPROPERTY()
     class ATOHCharacter* PlayerRef = nullptr;
