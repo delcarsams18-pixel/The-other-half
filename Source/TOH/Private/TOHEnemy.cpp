@@ -1,4 +1,9 @@
 #include "TOHEnemy.h"
+#include "ProceduralMeshComponent.h"
+#include "BrickMeshData.h"
+#include "DeadeyeMeshData.h"
+#include "ShivMeshData.h"
+#include "HexMeshData.h"
 #include "TOHCharacter.h"
 #include "TOHProjectile.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -24,6 +29,9 @@ ATOHEnemy::ATOHEnemy()
     }
     BodyMesh->SetupAttachment(GetMesh());
 
+    GunModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("GunModel"));
+    GunModel->SetupAttachment(GetMesh());
+
     ProjectileClass = ATOHProjectile::StaticClass();
 }
 
@@ -38,6 +46,77 @@ void ATOHEnemy::BeginPlay()
         Mat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.15f, 0.02f, 0.02f));
         Mat->SetVectorParameterValue(TEXT("EmissiveColor"), FLinearColor(1.0f, 0.1f, 0.05f));
         Mat->SetScalarParameterValue(TEXT("EmissiveIntensity"), 2.0f);
+    }
+
+    // Build hired gun 3D model from embedded data
+    if (GunModel)
+    {
+        // Random gun type if not set
+        if (GunType < 0 || GunType > 3)
+        {
+            GunType = FMath::RandRange(0, 3);
+        }
+        
+        const float* Verts = nullptr;
+        const uint32* Idxs = nullptr;
+        int32 NumVerts = 0;
+        int32 NumIdx = 0;
+        
+        switch (GunType)
+        {
+        case 0:
+            Verts = Brick_Vertices; Idxs = Brick_Indices;
+            NumVerts = sizeof(Brick_Vertices)/sizeof(float)/3;
+            NumIdx = sizeof(Brick_Indices)/sizeof(uint32);
+            break;
+        case 1:
+            Verts = Deadeye_Vertices; Idxs = Deadeye_Indices;
+            NumVerts = sizeof(Deadeye_Vertices)/sizeof(float)/3;
+            NumIdx = sizeof(Deadeye_Indices)/sizeof(uint32);
+            break;
+        case 2:
+            Verts = Shiv_Vertices; Idxs = Shiv_Indices;
+            NumVerts = sizeof(Shiv_Vertices)/sizeof(float)/3;
+            NumIdx = sizeof(Shiv_Indices)/sizeof(uint32);
+            break;
+        case 3:
+            Verts = Hex_Vertices; Idxs = Hex_Indices;
+            NumVerts = sizeof(Hex_Vertices)/sizeof(float)/3;
+            NumIdx = sizeof(Hex_Indices)/sizeof(uint32);
+            break;
+        }
+        
+        if (Verts && Idxs)
+        {
+            TArray<FVector> Vertices;
+            TArray<int32> Triangles;
+            TArray<FVector> Normals;
+            TArray<FVector2D> UVs;
+            TArray<FLinearColor> Colors;
+            TArray<FProcMeshTangent> Tangents;
+            
+            for (int32 i = 0; i < NumVerts; i++)
+            {
+                float GX = Verts[i*3];
+                float GY = Verts[i*3+1];
+                float GZ = Verts[i*3+2];
+                Vertices.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f));
+                Normals.Add(FVector(0, 0, 1));
+                UVs.Add(FVector2D(0, 0));
+                Colors.Add(FLinearColor::White);
+                Tangents.Add(FProcMeshTangent(1, 0, 0));
+            }
+            for (int32 i = 0; i < NumIdx; i++)
+            {
+                Triangles.Add((int32)Idxs[i]);
+            }
+            GunModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+            GunModel->SetRelativeLocation(FVector(0, 0, -50));
+            if (BodyMesh)
+            {
+                BodyMesh->SetVisibility(false);
+            }
+        }
     }
 
     TargetPlayer = Cast<ATOHCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
