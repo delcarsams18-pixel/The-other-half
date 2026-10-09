@@ -1,4 +1,5 @@
 #include "TOHGameMode.h"
+#include "TOHHeroNPC.h"
 #include "TOHCharacter.h"
 #include "TOHEnemy.h"
 #include "TOHProjectile.h"
@@ -231,11 +232,18 @@ void ATOHGameMode::SpawnCarrieMarker()
     // Carrie is held at the north end of the city - player must fight through to reach her
     CarrieMarker = World->SpawnActor<ATOHCarrieHologram>(ATOHCarrieHologram::StaticClass(), FVector(0, 3200, 100), FRotator::ZeroRotator);
     
-    // Hero team NPCs in the central plaza (using enemy class as base, friendly)
-    // They use the embedded hero mesh data
-    struct FHeroSpawn { const TCHAR* Name; float X; float Y; int32 MeshIdx; };
-    // MeshIdx: 0=PMac, 1=BZ, 2=Adam, 3=Darrel, 4=BigNate (handled in enemy code via GunType offset)
-    // For now, spawn as visual-only actors
+    // Hero team NPCs in the central plaza
+    for (int32 h = 0; h < 5; h++)
+    {
+        float Angle = (h / 5.0f) * 2.0f * PI;
+        float HX = FMath::Cos(Angle) * 400.0f;
+        float HY = FMath::Sin(Angle) * 400.0f;
+        ATOHHeroNPC* Hero = World->SpawnActor<ATOHHeroNPC>(ATOHHeroNPC::StaticClass(), FVector(HX, HY, 100), FRotator(0, Angle * 180.0f / PI + 90.0f, 0));
+        if (Hero)
+        {
+            Hero->HeroType = h;
+        }
+    }
 }
 
 void ATOHGameMode::OnEnemyKilled()
