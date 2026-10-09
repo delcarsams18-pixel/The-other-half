@@ -178,6 +178,28 @@ void ATOHGameMode::BuildDistrict()
         MakeBox(FVector(StreetWidth/2, Pos, 620), FVector(1.2f, 1.2f, 0.4f), FLinearColor(1.0f, 0.5f, 0.15f), 6.0f);
     }
 
+    // Health pickups (green glowing cubes) scattered through the city
+    for (int32 i = 0; i < 12; i++)
+    {
+        float PX = FMath::RandRange(-4800.0f, 4800.0f);
+        float PY = FMath::RandRange(-4800.0f, 4800.0f);
+        // Keep clear of center spawn
+        if (FMath::Abs(PX) < 800.0f && FMath::Abs(PY) < 800.0f) continue;
+        AStaticMeshActor* Pickup = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector(PX, PY, 80), FRotator::ZeroRotator);
+        UStaticMeshComponent* PComp = Pickup->GetStaticMeshComponent();
+        PComp->SetStaticMesh(CubeMeshAsset);
+        PComp->SetWorldScale3D(FVector(0.8f, 0.8f, 0.8f));
+        Pickup->Tags.Add(FName("HealthPickup"));
+        UMaterialInstanceDynamic* PMat = PComp->CreateDynamicMaterialInstance(0);
+        if (PMat)
+        {
+            FLinearColor Green(0.1f, 1.0f, 0.3f);
+            PMat->SetVectorParameterValue(TEXT("BaseColor"), Green);
+            PMat->SetVectorParameterValue(TEXT("EmissiveColor"), Green);
+            PMat->SetScalarParameterValue(TEXT("EmissiveIntensity"), 4.0f);
+        }
+    }
+
     // Lighting
     ADirectionalLight* Sun = World->SpawnActor<ADirectionalLight>(ADirectionalLight::StaticClass(), FVector::ZeroVector, FRotator(-50.0f, -30.0f, 0.0f));
     Sun->GetLightComponent()->SetIntensity(0.35f);
