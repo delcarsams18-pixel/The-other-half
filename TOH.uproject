@@ -1,6 +1,21 @@
 {
   "FileVersion": 3,
-  "EngineAssociation": "5.5.4",
-  "Modules": [{ "Name": "TOH", "Type": "Runtime", "LoadingPhase": "Default" }],
-  "Plugins": [{ "Name": "USDImporter", "Enabled": false }]
+  "EngineAssociation": "5.5",
+  "Modules": [
+    {
+      "Name": "TOH",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "USDImporter",
+      "Enabled": false
+    }
+  ],
+  "TargetPlatforms": [
+    "Windows",
+    "Android"
+  ]
 }
