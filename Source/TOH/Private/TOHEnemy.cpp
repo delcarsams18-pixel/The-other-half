@@ -95,6 +95,14 @@ void ATOHEnemy::BeginPlay()
             TArray<FLinearColor> Colors;
             TArray<FProcMeshTangent> Tangents;
             
+            FLinearColor GunColor = FLinearColor::White;
+            switch (GunType)
+            {
+            case 0: GunColor = FLinearColor(0.5f, 0.2f, 0.1f); break; // Brick: brown/red
+            case 1: GunColor = FLinearColor(0.1f, 0.2f, 0.5f); break; // Deadeye: blue
+            case 2: GunColor = FLinearColor(0.4f, 0.1f, 0.5f); break; // Shiv: purple
+            case 3: GunColor = FLinearColor(0.1f, 0.5f, 0.2f); break; // Hex: green
+            }
             for (int32 i = 0; i < NumVerts; i++)
             {
                 float GX = Verts[i*3];
@@ -103,7 +111,7 @@ void ATOHEnemy::BeginPlay()
                 Vertices.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f));
                 Normals.Add(FVector(0, 0, 1));
                 UVs.Add(FVector2D(0, 0));
-                Colors.Add(FLinearColor::White);
+                Colors.Add(GunColor);
                 Tangents.Add(FProcMeshTangent(1, 0, 0));
             }
             for (int32 i = 0; i < NumIdx; i++)
