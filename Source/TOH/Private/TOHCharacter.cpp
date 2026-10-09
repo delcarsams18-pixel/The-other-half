@@ -142,6 +142,21 @@ void ATOHCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
+    // Check for health pickups
+    TArray<AActor*> Overlapping;
+    GetOverlappingActors(Overlapping, AStaticMeshActor::StaticClass());
+    for (AActor* Actor : Overlapping)
+    {
+        if (Actor && Actor->ActorHasTag(FName("HealthPickup")))
+        {
+            if (Health < MaxHealth)
+            {
+                Health = FMath::Min(MaxHealth, Health + 30.0f);
+                Actor->Destroy();
+            }
+        }
+    }
+
     if (bTouchActive && IsAlive() && Controller)
     {
         APlayerController* PC = Cast<APlayerController>(Controller);
