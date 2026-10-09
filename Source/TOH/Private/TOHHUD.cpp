@@ -2,6 +2,8 @@
 #include "TOHCharacter.h"
 #include "TOHGameMode.h"
 #include "Engine/Canvas.h"
+#include "Engine/Texture2D.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
 
 void ATOHHUD::DrawHUD()
@@ -29,6 +31,13 @@ void ATOHHUD::DrawHealthBar()
 
     FString HPText = FString::Printf(TEXT("HP: %d"), FMath::RoundToInt(Player->Health));
     DrawText(HPText, FLinearColor::White, Pos.X, Pos.Y - 22, nullptr, 1.2f, false);
+
+    static ConstructorHelpers::FObjectFinder<UTexture2D> LonzoTex(TEXT("/Game/Textures/TOH_Lonzo"));
+    if (LonzoTex.Succeeded())
+    {
+        DrawTexture(LonzoTex.Object, 30.0f, 80.0f, 90.0f, 140.0f,
+            0.0f, 0.0f, 1.0f, 1.0f, FLinearColor::White);
+    }
 }
 
 void ATOHHUD::DrawObjective()
