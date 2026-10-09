@@ -1,8 +1,10 @@
 #include "Hero.h"
+#include "TOHCharacter.h"
+#include "TOHBossCharacter.h"
 
 ATOHGameMode::ATOHGameMode()
 {
-    DefaultPawnClass = nullptr;
+    DefaultPawnClass = ATOHCharacter::StaticClass();
 }
 
 void ATOHGameMode::Load()
@@ -74,33 +76,22 @@ void ATOHGameMode::Load()
         Districts.Add(District);
     };
 
-    // LONZO - GATLING GUN + BLUE PULSE ROUNDS
-    // Cyber Arm with Gatling Gun Robot Arm
-    // A1: Gatling Barrage (rapid fire blue pulse rounds)
-    // A2: Pulse Shock (charged blue energy blast)
-    // A3: Arm Shield (defensive cyber barrier)
+    // LONZO - BLUE PULSE GATLING ARM
     AddHero(TEXT("lonzo"), TEXT("Lonzo Tech Specialist"), TEXT("Support / Ranged"), TEXT("Gatling Gun Robot Arm"),
         TEXT("Gatling Barrage"), TEXT("Pulse Shock"), TEXT("Arm Shield"),
-        TEXT("Lonzo fires rapid blue pulse rounds from his gatling gun cyber arm. The Other Half core tech healer and field specialist with heavy firepower."), TEXT("Benway City"), TEXT("Hero"));
+        TEXT("Lonzo fires rapid blue pulse rounds from his gatling gun cyber arm. He carries the energy of The Other Half and protects the city core."), TEXT("Benway City"), TEXT("Hero"));
 
     // CARRIE - TELEKINESIS + AI BRAIN
-    // Red Armor with Blue Core and Blue Eyes (AI Brain)
-    // A1: Telekinetic Crush (lift and throw enemies)
-    // A2: Mental Override (control enemy actions via AI brain link)
-    // A3: Core Sync (sync with Lonzo for combined attacks)
     AddHero(TEXT("carrie"), TEXT("Carrie Cyber Psionic"), TEXT("Controller / Support"), TEXT("AI Brain + Energy Core"),
         TEXT("Telekinetic Crush"), TEXT("Mental Override"), TEXT("Core Sync"),
-        TEXT("Carrie uses her AI brain for telekinetic control and psionic attacks. She runs the red-cyan energy control line and protects the city core. Red armor with glowing blue core and AI eyes."), TEXT("Benway City"), TEXT("Hero"));
+        TEXT("Carrie uses telekinesis, AI mental control, and psionic energy to control the battlefield and defend the city core."), TEXT("Benway City"), TEXT("Hero"));
 
-    // THE WARDEN - PRISON BOSS
-    // Security Control Master with heavy armor and prison security tech
-    // Counters Lonzo's bullets with armor plating
-    // Resists Carrie's telekinesis with mental fortification
+    // BOSS
     AddVillain(TEXT("warden"), TEXT("The Warden"), TEXT("Prison Boss"), TEXT("Prison District"), TEXT("Extreme"), TEXT("Security control and mental fortification"), 500, 70);
 
     // DISTRICTS
-    AddDistrict(TEXT("prison"), TEXT("Prison District"), TEXT("Metal cells, security towers, and brutal control systems. The Warden's fortress of steel and code."), TEXT("The Warden"), TEXT("Harsh and oppressive"));
-    AddDistrict(TEXT("benway"), TEXT("Benway City"), TEXT("The heart of the game world, a neon metropolis in desperate need of recovery. Lonzo and Carrie's home base for Operation Recover."), TEXT("Operation Recover"), TEXT("Bright, unstable, and alive"));
+    AddDistrict(TEXT("prison"), TEXT("Prison District"), TEXT("Metal cells, security towers, and brutal security systems. The Warden controls the prison from a fortified tower."), TEXT("The Warden"), TEXT("Harsh and oppressive"));
+    AddDistrict(TEXT("benway"), TEXT("Benway City"), TEXT("The heart of the city. Neon towers, blue energy conduits, and street-level chaos. The city is under pressure to recover."), TEXT("Operation Recover"), TEXT("Bright, unstable, and alive"));
 }
 
 FTOHHero ATOHGameMode::GetHeroById(const FString& HeroId) const
