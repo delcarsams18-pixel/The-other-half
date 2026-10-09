@@ -1,4 +1,5 @@
 using UnrealBuildTool;
+
 public class TOHEditorTarget : TargetRules
 {
     public TOHEditorTarget(TargetInfo Target) : base(Target)
