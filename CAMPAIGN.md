@@ -2,11 +2,11 @@
 
 ## Structure: OPEN WORLD
 Benway, Missouri is one continuous open world — all districts connected, free to explore. Missions unlock in story order but the player can roam anywhere. Districts stream in as the player travels.
-Benway, Missouri, 2526 — 500 years after collapse. Lonzo owns Pulse Plet Technologies. After an accident, half of Carrie's brain was replaced with robotics/AI — she kept her memories and gained telekinesis, mind-reading, and pulse blasts. Beezy (herb expert) was drugged and tricked into stealing a hard drive carrying Carrie's brain update. The villains used it to brainwash Carrie and built an army from Lonzo's stolen tech. Now Lonzo fights through Benway City to get her back.
+Benway, Missouri, 2526 — 500 years after collapse. Lonzo owns Pulse Plait Tech. After an accident, half of Carrie's brain was replaced with robotics/AI — she kept her memories and gained telekinesis, mind-reading, and pulse blasts. Beezy (herb expert) was drugged and tricked into stealing a hard drive carrying Carrie's brain update. The villains used it to brainwash Carrie and built an army from Lonzo's stolen tech. Now Lonzo fights through Benway City to get her back.
 
 ## Act 1: Sparks in the Static
 **District 7 — Home Base (Tutorial)**
-Lonzo gears up at Pulse Plet HQ. P-Mac briefs him: Carrie's signal is moving through the districts, each villain holding a piece of the control network. Squad assembles: Big Nate (muscle), Adam (tech), BZ (herbs = health), P-Mac (intel), Darrel (kennel), Deacon (infiltration).
+Lonzo gears up at Pulse Plait HQ. P-Mac briefs him: Carrie's signal is moving through the districts, each villain holding a piece of the control network. Squad assembles: Big Nate (muscle), Adam (tech), BZ (herbs = health), P-Mac (intel), Darrel (kennel), Deacon (infiltration).
 *Objective: Learn controls, meet squad, receive Operation Recover briefing.*
 
 **Prison District — Jeff City Ruins (Boss: The Warden)**
@@ -19,7 +19,7 @@ Neon Queen broadcasts the brainwash signal through club holograms and ads. Her h
 *Twist: One of her dancers slips Lonzo a data chip — someone inside wants the Queen gone.*
 
 **Scrapyard — KC Yards (Boss: Rust Father)**
-Rust Father melts down stolen Pulse Plet tech to build junk golems and rust hounds. His forge powers the villains' army production. Destroy the forges.
+Rust Father melts down stolen Pulse Plait tech to build junk golems and rust hounds. His forge powers the villains' army production. Destroy the forges.
 *BZ finds a herb strain growing in the toxic runoff — new heal item unlocked.*
 
 **Herb Fields — Columbia Agri-Labs (Boss: The Chemist)**
@@ -45,7 +45,7 @@ Open plains, scattered settlements. Side missions, gear up, squad campfire scene
 
 ## Act 4: The Other Half
 **Overlord Citadel (Final Boss: The Overlord)**
-Black fortress, elite guard, every underling type. Fight up the tower. The Overlord reveals: he was Lonzo's former partner at Pulse Plet — he believes the brainwash "saved" Carrie from her trauma.
+Black fortress, elite guard, every underling type. Fight up the tower. The Overlord reveals: he was Lonzo's former partner at Pulse Plait — he believes the brainwash "saved" Carrie from her trauma.
 *Overlord: "You built an empire of tech, Lonzo. I just... took it."*
 
 **Carrie Boss Fight**
@@ -71,7 +71,7 @@ Brainwashed Carrie in red armor, red helmet, blue core, blue eyes. She fights wi
 10. Overlord Citadel — Overlord, Carrie fight, Rescue scene
 
 ## Filled Blanks (Pip's additions for Lonzo's approval)
-- Overlord = Lonzo's ex-partner at Pulse Plet (gives the final fight personal weight)
+- Overlord = Lonzo's ex-partner at Pulse Plait (gives the final fight personal weight)
 - Beezy gets a redemption arc in Herb Fields
 - Each squad member gets a spotlight district (BZ/Herb Fields, Darrel/Kennel Row, Deacon/Blade Alley, P-Mac/Signal Tower)
 - The data chip from Red Light Row pays off at the Signal Tower
