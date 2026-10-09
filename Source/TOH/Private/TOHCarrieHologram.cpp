@@ -1,6 +1,7 @@
 #include "TOHCarrieHologram.h"
 #include "TOHArtLoader.h"
 #include "TOHGLBLoader.h"
+#include "CarrieMeshData.h"
 #include "ProceduralMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
@@ -39,9 +40,31 @@ void ATOHCarrieHologram::BeginPlay()
 {
     Super::BeginPlay();
 
-    UProceduralMeshComponent* CarrieModel = UTOHGLBLoader::LoadGLBAsMesh(this, TEXT("Carrie.glb"));
-    if (CarrieModel)
+    // Build Carrie 3D model from embedded mesh data
     {
+        UProceduralMeshComponent* CarrieModel = NewObject<UProceduralMeshComponent>(this);
+        TArray<FVector> Vertices;
+        TArray<int32> Triangles;
+        TArray<FVector> Normals;
+        TArray<FVector2D> UVs;
+        TArray<FColor> Colors;
+        TArray<FProcMeshTangent> Tangents;
+        
+        int32 NumVerts = sizeof(Carrie_Vertices) / sizeof(float) / 3;
+        for (int32 i = 0; i < NumVerts; i++)
+        {
+            Vertices.Add(FVector(Carrie_Vertices[i*3], Carrie_Vertices[i*3+1], Carrie_Vertices[i*3+2]));
+            Normals.Add(FVector(0, 0, 1));
+            UVs.Add(FVector2D(0, 0));
+            Colors.Add(FColor::White);
+            Tangents.Add(FProcMeshTangent(1, 0, 0));
+        }
+        int32 NumIdx = sizeof(Carrie_Indices) / sizeof(uint32);
+        for (int32 i = 0; i < NumIdx; i++)
+        {
+            Triangles.Add((int32)Carrie_Indices[i]);
+        }
+        CarrieModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
         CarrieModel->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
         CarrieModel->SetRelativeLocation(FVector(0, 0, -90));
         CarrieModel->RegisterComponent();
