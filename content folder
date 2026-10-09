@@ -1,0 +1,14 @@
+repo-root/
+  TOH.uproject
+  Config/
+    DefaultEngine.ini
+    DefaultGame.ini
+  Source/
+    TOH/
+      Public/
+      Private/
+      TOH.Build.cs
+      TOH.Target.cs
+    TOHEditor/
+      TOHEditor.Target.cs
+  Content/
