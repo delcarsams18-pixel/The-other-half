@@ -16,6 +16,9 @@ ATOHCarrieHologram::ATOHCarrieHologram()
     PrimaryActorTick.bCanEverTick = true;
 
     HologramPlane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HologramPlane"));
+    
+    CarrieModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("CarrieModel"));
+    CarrieModel->SetupAttachment(RootComponent);
     static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneMesh(TEXT("/Engine/BasicShapes/Plane"));
     if (PlaneMesh.Succeeded())
     {
@@ -42,8 +45,8 @@ void ATOHCarrieHologram::BeginPlay()
     Super::BeginPlay();
 
     // Build Carrie 3D model from embedded mesh data
+    if (CarrieModel)
     {
-        UProceduralMeshComponent* CarrieModel = NewObject<UProceduralMeshComponent>(this);
         TArray<FVector> Vertices;
         TArray<int32> Triangles;
         TArray<FVector> Normals;
@@ -71,9 +74,7 @@ void ATOHCarrieHologram::BeginPlay()
         {
             CarrieModel->SetMaterial(0, BaseMat);
         }
-        CarrieModel->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
         CarrieModel->SetRelativeLocation(FVector(0, 0, -90));
-        CarrieModel->RegisterComponent();
         if (HologramPlane)
         {
             HologramPlane->SetVisibility(false);
