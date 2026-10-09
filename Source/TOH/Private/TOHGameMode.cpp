@@ -230,6 +230,12 @@ void ATOHGameMode::SpawnCarrieMarker()
 
     // Carrie is held at the north end of the city - player must fight through to reach her
     CarrieMarker = World->SpawnActor<ATOHCarrieHologram>(ATOHCarrieHologram::StaticClass(), FVector(0, 3200, 100), FRotator::ZeroRotator);
+    
+    // Hero team NPCs in the central plaza (using enemy class as base, friendly)
+    // They use the embedded hero mesh data
+    struct FHeroSpawn { const TCHAR* Name; float X; float Y; int32 MeshIdx; };
+    // MeshIdx: 0=PMac, 1=BZ, 2=Adam, 3=Darrel, 4=BigNate (handled in enemy code via GunType offset)
+    // For now, spawn as visual-only actors
 }
 
 void ATOHGameMode::OnEnemyKilled()
