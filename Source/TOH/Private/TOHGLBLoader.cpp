@@ -17,6 +17,8 @@ FString UTOHGLBLoader::GetModelPath(const FString& FileName)
     Candidates.Add(FPaths::ProjectPersistentDownloadDir() + TEXT("Models/") + FileName);
     Candidates.Add(TEXT("/storage/emulated/0/UE4Game/TOH/TOH/Content/Models/") + FileName);
     Candidates.Add(TEXT("/storage/emulated/0/Android/obb/com.YourCompany.TOH/Content/Models/") + FileName);
+    Candidates.Add(TEXT("/data/data/com.YourCompany.TOH/files/UE4Game/TOH/TOH/Content/Models/") + FileName);
+    Candidates.Add(TEXT("/data/data/com.YourCompany.TOH/files/Models/") + FileName);
     
     for (const FString& Path : Candidates)
     {
