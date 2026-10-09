@@ -1,5 +1,6 @@
 #include "TOHHUD.h"
 #include "TOHCharacter.h"
+#include "TOHEnemy.h"
 #include "TOHGameMode.h"
 #include "TOHArtLoader.h"
 #include "Engine/Canvas.h"
@@ -14,12 +15,80 @@ void ATOHHUD::DrawHUD()
 
     DrawHealthBar();
     DrawObjective();
+    DrawCharacterArt();
+    DrawEnemyMarkers();
     DrawEndScreen();
+}
+
+void ATOHHUD::DrawCharacterArt()
+{
+    if (LonzoPortrait && Canvas)
+    {
+        float Size = 160.0f;
+        float X = Canvas->ClipX - Size - 20.0f;
+        float Y = Canvas->ClipY - Size - 20.0f;
+        DrawTexture(LonzoPortrait, X, Y, Size, Size, 0.0f, 0.0f, 1.0f, 1.0f, FLinearColor::White);
+        DrawText(TEXT("LONZO"), FLinearColor(0.4f, 0.8f, 1.0f), X, Y - 22, nullptr, 1.1f, false);
+    }
+}
+
+void ATOHHUD::DrawEnemyMarkers()
+{
+    if (VillainPortraits.Num() == 0 || !Canvas) return;
+
+    APlayerController* PC = GetOwningPlayerController();
+    if (!PC) return;
+
+    TArray<AActor*> Enemies;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATOHEnemy::StaticClass(), Enemies);
+
+    int32 Idx = 0;
+    for (AActor* E : Enemies)
+    {
+        if (!E) continue;
+        FVector WorldPos = E->GetActorLocation() + FVector(0, 0, 150);
+        FVector2D ScreenPos;
+        if (PC->ProjectWorldLocationToScreen(WorldPos, ScreenPos, true))
+        {
+            if (ScreenPos.X > 0 && ScreenPos.X < Canvas->ClipX && ScreenPos.Y > 0 && ScreenPos.Y < Canvas->ClipY)
+            {
+                UTexture2D* Portrait = VillainPortraits[Idx % VillainPortraits.Num()];
+                float Size = 80.0f;
+                DrawTexture(Portrait, ScreenPos.X - Size * 0.5f, ScreenPos.Y - Size * 0.5f,
+                    Size, Size, 0.0f, 0.0f, 1.0f, 1.0f, FLinearColor::White);
+            }
+        }
+        Idx++;
+    }
 }
 
 ATOHHUD::ATOHHUD()
 {
     LonzoPortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Lonzo.png"));
+    CarriePortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Carrie.png"));
+
+    TArray<FString> VillainFiles = {
+        TEXT("TOH_Villain_Warden.png"),
+        TEXT("TOH_Villain_NeonQueen.png"),
+        TEXT("TOH_Villain_RustFather.png"),
+        TEXT("TOH_Villain_Chemist.png"),
+        TEXT("TOH_Villain_HoundMaster.png"),
+        TEXT("TOH_Villain_BladeMother.png"),
+        TEXT("TOH_Villain_SignalBreaker.png"),
+        TEXT("TOH_Villain_Overlord.png"),
+        TEXT("TOH_Underling_Brute.png"),
+        TEXT("TOH_Underling_Striker.png"),
+        TEXT("TOH_Underling_Vex.png"),
+        TEXT("TOH_Underling_Jinx.png")
+    };
+    for (const FString& VF : VillainFiles)
+    {
+        UTexture2D* Tex = UTOHArtLoader::LoadPNGFromFile(VF);
+        if (Tex)
+        {
+            VillainPortraits.Add(Tex);
+        }
+    }
 }
 
 void ATOHHUD::DrawHealthBar()
