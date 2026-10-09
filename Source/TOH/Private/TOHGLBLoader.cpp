@@ -11,13 +11,23 @@
 
 FString UTOHGLBLoader::GetModelPath(const FString& FileName)
 {
-    FString BaseDir = FPaths::ProjectContentDir() + TEXT("Models/");
-    FString FullPath = BaseDir + FileName;
-    if (!FPaths::FileExists(FullPath))
+    TArray<FString> Candidates;
+    Candidates.Add(FPaths::ProjectContentDir() + TEXT("Models/") + FileName);
+    Candidates.Add(FPaths::ProjectDir() + TEXT("Content/Models/") + FileName);
+    Candidates.Add(FPaths::ProjectPersistentDownloadDir() + TEXT("Models/") + FileName);
+    Candidates.Add(TEXT("/storage/emulated/0/UE4Game/TOH/TOH/Content/Models/") + FileName);
+    Candidates.Add(TEXT("/storage/emulated/0/Android/obb/com.YourCompany.TOH/Content/Models/") + FileName);
+    
+    for (const FString& Path : Candidates)
     {
-        FullPath = FPaths::ProjectDir() + TEXT("Content/Models/") + FileName;
+        if (FPaths::FileExists(Path))
+        {
+            UE_LOG(LogTemp, Log, TEXT("GLBLoader: Found %s"), *Path);
+            return Path;
+        }
     }
-    return FullPath;
+    UE_LOG(LogTemp, Warning, TEXT("GLBLoader: Model not found: %s"), *FileName);
+    return Candidates[0];
 }
 
 UProceduralMeshComponent* UTOHGLBLoader::LoadGLBAsMesh(UObject* Outer, const FString& FileName)
