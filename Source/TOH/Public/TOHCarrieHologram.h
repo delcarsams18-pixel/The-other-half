@@ -24,4 +24,7 @@ protected:
 
     UPROPERTY()
     class UTexture2D* CarrieTexture = nullptr;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH")
+    class UProceduralMeshComponent* CarrieModel;
 };
