@@ -74,25 +74,33 @@ void ATOHGameMode::Load()
         Districts.Add(District);
     };
 
-    // HEROES
-    AddHero(TEXT("lonzo"), TEXT("Lonzo Tech Specialist"), TEXT("Support"), TEXT("Cyber Arm"),
-        TEXT("Pulse Burst"), TEXT("Shock Grid"), TEXT("Null Burst"),
-        TEXT("The Other Half core tech healer and field specialist."), TEXT("Benway City"), TEXT("Hero"));
+    // LONZO - GATLING GUN + BLUE PULSE ROUNDS
+    // Cyber Arm with Gatling Gun Robot Arm
+    // A1: Gatling Barrage (rapid fire blue pulse rounds)
+    // A2: Pulse Shock (charged blue energy blast)
+    // A3: Arm Shield (defensive cyber barrier)
+    AddHero(TEXT("lonzo"), TEXT("Lonzo Tech Specialist"), TEXT("Support / Ranged"), TEXT("Gatling Gun Robot Arm"),
+        TEXT("Gatling Barrage"), TEXT("Pulse Shock"), TEXT("Arm Shield"),
+        TEXT("Lonzo fires rapid blue pulse rounds from his gatling gun cyber arm. The Other Half core tech healer and field specialist with heavy firepower."), TEXT("Benway City"), TEXT("Hero"));
 
-    AddHero(TEXT("carrie"), TEXT("Carrie Cyber Psionic"), TEXT("Controller"), TEXT("Energy Core"),
-        TEXT("Mind Surge"), TEXT("Aether Grip"), TEXT("Core Sync"),
-        TEXT("Carrie runs the red-cyan energy control line and protects the city core."), TEXT("Benway City"), TEXT("Hero"));
+    // CARRIE - TELEKINESIS + AI BRAIN
+    // Red Armor with Blue Core and Blue Eyes (AI Brain)
+    // A1: Telekinetic Crush (lift and throw enemies)
+    // A2: Mental Override (control enemy actions via AI brain link)
+    // A3: Core Sync (sync with Lonzo for combined attacks)
+    AddHero(TEXT("carrie"), TEXT("Carrie Cyber Psionic"), TEXT("Controller / Support"), TEXT("AI Brain + Energy Core"),
+        TEXT("Telekinetic Crush"), TEXT("Mental Override"), TEXT("Core Sync"),
+        TEXT("Carrie uses her AI brain for telekinetic control and psionic attacks. She runs the red-cyan energy control line and protects the city core. Red armor with glowing blue core and AI eyes."), TEXT("Benway City"), TEXT("Hero"));
 
-    // BOSS
-    AddVillain(TEXT("warden"), TEXT("The Warden"), TEXT("Prison Boss"), TEXT("Prison District"), TEXT("Extreme"), TEXT("Security control"), 500, 70);
+    // THE WARDEN - PRISON BOSS
+    // Security Control Master with heavy armor and prison security tech
+    // Counters Lonzo's bullets with armor plating
+    // Resists Carrie's telekinesis with mental fortification
+    AddVillain(TEXT("warden"), TEXT("The Warden"), TEXT("Prison Boss"), TEXT("Prison District"), TEXT("Extreme"), TEXT("Security control and mental fortification"), 500, 70);
 
     // DISTRICTS
-    AddDistrict(TEXT("prison"), TEXT("Prison District"), TEXT("Metal cells, security towers, and brutal control systems."), TEXT("The Warden"), TEXT("Harsh and oppressive"));
-    AddDistrict(TEXT("benway"), TEXT("Benway City"), TEXT("The heart of the game world, a neon metropolis in desperate need of recovery."), TEXT("Operation Recover"), TEXT("Bright, unstable, and alive"));
-
-    // OPTIONAL: keep these if you want a stronger base later
-    // AddHero(TEXT("darrel"), TEXT("Darrel Kennel Boss"), TEXT("Tank"), TEXT("Blue Chest Core"), TEXT("Security Lock"), TEXT("Stomp Pulse"), TEXT("Keeper Wall"), TEXT("Security titan and front line defender."), TEXT("Kennel Row"), TEXT("Hero"));
-    // AddHero(TEXT("adam"), TEXT("Adam Bunny Coins"), TEXT("Ranged"), TEXT("Cannon Burst"), TEXT("Bunny Dash"), TEXT("Coin Burst"), TEXT("Volt Shot"), TEXT("Fast-moving ranged specialist with a bunny-tech stance."), TEXT("Red Light Row"), TEXT("Hero"));
+    AddDistrict(TEXT("prison"), TEXT("Prison District"), TEXT("Metal cells, security towers, and brutal control systems. The Warden's fortress of steel and code."), TEXT("The Warden"), TEXT("Harsh and oppressive"));
+    AddDistrict(TEXT("benway"), TEXT("Benway City"), TEXT("The heart of the game world, a neon metropolis in desperate need of recovery. Lonzo and Carrie's home base for Operation Recover."), TEXT("Operation Recover"), TEXT("Bright, unstable, and alive"));
 }
 
 FTOHHero ATOHGameMode::GetHeroById(const FString& HeroId) const
