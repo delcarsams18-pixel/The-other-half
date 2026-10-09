@@ -43,6 +43,12 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH")
     class UStaticMeshComponent* BodyMesh;
 
+    UPROPERTY(VisibleAnywhere, Category = "TOH")
+    class UProceduralMeshComponent* GunModel;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "TOH")
+    int32 GunType = 0;
+
     UPROPERTY(EditDefaultsOnly, Category = "TOH")
     TSubclassOf<class ATOHProjectile> ProjectileClass;
 
