@@ -81,7 +81,7 @@ void ATOHGameMode::BuildDistrict()
         AStaticMeshActor* Ground = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
         UStaticMeshComponent* GComp = Ground->GetStaticMeshComponent();
         GComp->SetStaticMesh(PlaneMeshAsset);
-        GComp->SetWorldScale3D(FVector(110.0f, 110.0f, 1.0f));
+        GComp->SetWorldScale3D(FVector(140.0f, 140.0f, 1.0f));
         UMaterialInstanceDynamic* GMat = GComp->CreateDynamicMaterialInstance(0);
         if (GMat)
         {
@@ -95,9 +95,9 @@ void ATOHGameMode::BuildDistrict()
     const float StreetWidth = 400.0f;
     const float CellSize = BlockSize + StreetWidth;
     
-    for (int32 gx = -3; gx <= 3; gx++)
+    for (int32 gx = -4; gx <= 4; gx++)
     {
-        for (int32 gy = -3; gy <= 3; gy++)
+        for (int32 gy = -4; gy <= 4; gy++)
         {
             // Skip center block (plaza/spawn area)
             if (gx == 0 && gy == 0) continue;
@@ -164,7 +164,7 @@ void ATOHGameMode::BuildDistrict()
     }
     
     // Street lights along main roads
-    for (int32 i = -3; i <= 3; i++)
+    for (int32 i = -4; i <= 4; i++)
     {
         float Pos = i * CellSize;
         // X-axis street lights
@@ -180,10 +180,10 @@ void ATOHGameMode::BuildDistrict()
     }
 
     // Health pickups (green glowing cubes) scattered through the city
-    for (int32 i = 0; i < 12; i++)
+    for (int32 i = 0; i < 20; i++)
     {
-        float PX = FMath::RandRange(-4800.0f, 4800.0f);
-        float PY = FMath::RandRange(-4800.0f, 4800.0f);
+        float PX = FMath::RandRange(-6400.0f, 6400.0f);
+        float PY = FMath::RandRange(-6400.0f, 6400.0f);
         // Keep clear of center spawn
         if (FMath::Abs(PX) < 800.0f && FMath::Abs(PY) < 800.0f) continue;
         AStaticMeshActor* Pickup = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector(PX, PY, 80), FRotator::ZeroRotator);
