@@ -1,5 +1,7 @@
 #include "TOHCarrieHologram.h"
 #include "TOHArtLoader.h"
+#include "TOHGLBLoader.h"
+#include "ProceduralMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "UObject/ConstructorHelpers.h"
@@ -36,6 +38,18 @@ ATOHCarrieHologram::ATOHCarrieHologram()
 void ATOHCarrieHologram::BeginPlay()
 {
     Super::BeginPlay();
+
+    UProceduralMeshComponent* CarrieModel = UTOHGLBLoader::LoadGLBAsMesh(this, TEXT("Carrie.glb"));
+    if (CarrieModel)
+    {
+        CarrieModel->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+        CarrieModel->SetRelativeLocation(FVector(0, 0, -90));
+        CarrieModel->RegisterComponent();
+        if (HologramPlane)
+        {
+            HologramPlane->SetVisibility(false);
+        }
+    }
 
     UMaterialInstanceDynamic* Mat = HologramPlane->CreateDynamicMaterialInstance(0);
     if (Mat)
