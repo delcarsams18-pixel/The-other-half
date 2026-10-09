@@ -16,6 +16,15 @@ void ATOHHUD::DrawHUD()
     DrawEndScreen();
 }
 
+ATOHHUD::ATOHHUD()
+{
+    static ConstructorHelpers::FObjectFinder<UTexture2D> LonzoTexObj(TEXT("/Game/Textures/TOH_Lonzo"));
+    if (LonzoTexObj.Succeeded())
+    {
+        LonzoPortrait = LonzoTexObj.Object;
+    }
+}
+
 void ATOHHUD::DrawHealthBar()
 {
     ATOHCharacter* Player = Cast<ATOHCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -32,10 +41,9 @@ void ATOHHUD::DrawHealthBar()
     FString HPText = FString::Printf(TEXT("HP: %d"), FMath::RoundToInt(Player->Health));
     DrawText(HPText, FLinearColor::White, Pos.X, Pos.Y - 22, nullptr, 1.2f, false);
 
-    static ConstructorHelpers::FObjectFinder<UTexture2D> LonzoTex(TEXT("/Game/Textures/TOH_Lonzo"));
-    if (LonzoTex.Succeeded())
+    if (LonzoPortrait)
     {
-        DrawTexture(LonzoTex.Object, 30.0f, 80.0f, 90.0f, 140.0f,
+        DrawTexture(LonzoPortrait, 30.0f, 80.0f, 90.0f, 140.0f,
             0.0f, 0.0f, 1.0f, 1.0f, FLinearColor::White);
     }
 }
