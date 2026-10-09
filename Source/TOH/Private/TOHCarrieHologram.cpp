@@ -30,7 +30,7 @@ ATOHCarrieHologram::ATOHCarrieHologram()
 
     Tags.Add(TEXT("Carrie"));
 
-    CarrieTexture = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Carrie.png"));
+    CarrieTexture = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Carrie_Full.png"));
 }
 
 void ATOHCarrieHologram::BeginPlay()
