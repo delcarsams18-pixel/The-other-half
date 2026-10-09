@@ -179,6 +179,94 @@ void ATOHGameMode::BuildDistrict()
         MakeBox(FVector(StreetWidth/2, Pos, 620), FVector(1.2f, 1.2f, 0.4f), FLinearColor(1.0f, 0.5f, 0.15f), 6.0f);
     }
 
+    // DETAIL PASS: sidewalks, cars, billboards, rooftop elements, street props
+    
+    // Sidewalks along main streets (lighter gray strips)
+    for (int32 i = -4; i <= 4; i++)
+    {
+        float Pos = i * CellSize;
+        // X-direction sidewalks
+        MakeBox(FVector(Pos, -StreetWidth/2 - 60, 5), FVector(12.0f, 1.2f, 0.1f), FLinearColor(0.08f, 0.08f, 0.09f));
+        MakeBox(FVector(Pos, StreetWidth/2 + 60, 5), FVector(12.0f, 1.2f, 0.1f), FLinearColor(0.08f, 0.08f, 0.09f));
+        // Z-direction sidewalks  
+        MakeBox(FVector(-StreetWidth/2 - 60, Pos, 5), FVector(1.2f, 12.0f, 0.1f), FLinearColor(0.08f, 0.08f, 0.09f));
+        MakeBox(FVector(StreetWidth/2 + 60, Pos, 5), FVector(1.2f, 12.0f, 0.1f), FLinearColor(0.08f, 0.08f, 0.09f));
+    }
+    
+    // Parked cars (simple car shapes: body + cabin)
+    FMath::RandInit(777);
+    for (int32 i = 0; i < 24; i++)
+    {
+        float CX = FMath::RandRange(-6000.0f, 6000.0f);
+        float CY = FMath::RandRange(-6000.0f, 6000.0f);
+        // Snap to street edges
+        int32 Street = FMath::RandRange(0, 1);
+        if (Street == 0) CY = (FMath::RandRange(-4, 4) * CellSize) + StreetWidth/2 + 120;
+        else CX = (FMath::RandRange(-4, 4) * CellSize) + StreetWidth/2 + 120;
+        
+        float CarYaw = (Street == 0) ? 0.0f : 90.0f;
+        FLinearColor CarColor(FMath::RandRange(0.05f, 0.3f), FMath::RandRange(0.05f, 0.3f), FMath::RandRange(0.05f, 0.4f));
+        
+        // Car body
+        AStaticMeshActor* CarBody = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector(CX, CY, 60), FRotator(0, CarYaw, 0));
+        UStaticMeshComponent* CBComp = CarBody->GetStaticMeshComponent();
+        CBComp->SetStaticMesh(CubeMeshAsset);
+        CBComp->SetWorldScale3D(FVector(4.5f, 2.0f, 1.2f));
+        UMaterialInstanceDynamic* CBMat = CBComp->CreateDynamicMaterialInstance(0);
+        if (CBMat) CBMat->SetVectorParameterValue(TEXT("BaseColor"), CarColor);
+        
+        // Car cabin
+        AStaticMeshActor* CarTop = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector(CX, CY, 150), FRotator(0, CarYaw, 0));
+        UStaticMeshComponent* CTComp = CarTop->GetStaticMeshComponent();
+        CTComp->SetStaticMesh(CubeMeshAsset);
+        CTComp->SetWorldScale3D(FVector(2.5f, 1.8f, 0.8f));
+        UMaterialInstanceDynamic* CTMat = CTComp->CreateDynamicMaterialInstance(0);
+        if (CTMat) CTMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.05f, 0.08f, 0.12f));
+    }
+    
+    // Billboards on buildings
+    for (int32 i = 0; i < 10; i++)
+    {
+        float BX = FMath::RandRange(-5000.0f, 5000.0f);
+        float BY = FMath::RandRange(-5000.0f, 5000.0f);
+        float BH = FMath::RandRange(800.0f, 1500.0f);
+        FLinearColor AdColor;
+        int32 AC = FMath::RandRange(0, 3);
+        if (AC == 0) AdColor = FLinearColor(1.0f, 0.2f, 0.8f);
+        else if (AC == 1) AdColor = FLinearColor(0.2f, 0.8f, 1.0f);
+        else if (AC == 2) AdColor = FLinearColor(1.0f, 0.8f, 0.2f);
+        else AdColor = FLinearColor(0.5f, 1.0f, 0.3f);
+        // Billboard pole
+        MakeBox(FVector(BX, BY, BH * 0.5f), FVector(0.4f, 0.4f, BH / 100.0f), FLinearColor(0.05f, 0.05f, 0.05f));
+        // Billboard screen
+        MakeBox(FVector(BX, BY, BH + 50), FVector(6.0f, 0.3f, 3.0f), AdColor, 3.0f);
+    }
+    
+    // Rooftop details: water towers and AC units on random buildings
+    for (int32 i = 0; i < 15; i++)
+    {
+        float RX = FMath::RandRange(-5000.0f, 5000.0f);
+        float RY = FMath::RandRange(-5000.0f, 5000.0f);
+        float RH = FMath::RandRange(1000.0f, 1800.0f);
+        // Water tower (cylinder-ish box on legs)
+        MakeBox(FVector(RX, RY, RH + 100), FVector(1.5f, 1.5f, 2.0f), FLinearColor(0.15f, 0.1f, 0.08f));
+        MakeBox(FVector(RX, RY, RH + 250), FVector(2.0f, 2.0f, 1.0f), FLinearColor(0.2f, 0.12f, 0.08f));
+        // AC unit
+        MakeBox(FVector(RX + 200, RY + 150, RH + 40), FVector(1.2f, 1.0f, 0.8f), FLinearColor(0.12f, 0.12f, 0.14f));
+    }
+    
+    // Street props: benches and trash cans in plaza area
+    for (int32 i = 0; i < 8; i++)
+    {
+        float Angle = (i / 8.0f) * 2.0f * PI;
+        float PX = FMath::Cos(Angle) * 700.0f;
+        float PY = FMath::Sin(Angle) * 700.0f;
+        // Bench
+        MakeBox(FVector(PX, PY, 50), FVector(2.0f, 0.6f, 0.5f), FLinearColor(0.12f, 0.08f, 0.05f));
+        // Trash can
+        MakeBox(FVector(PX + 150, PY + 100, 60), FVector(0.6f, 0.6f, 1.2f), FLinearColor(0.08f, 0.1f, 0.08f));
+    }
+
     // Health pickups (green glowing cubes) scattered through the city
     for (int32 i = 0; i < 20; i++)
     {
