@@ -1,4 +1,5 @@
 #include "TOHCarrieHologram.h"
+#include "TOHArtLoader.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
 #include "UObject/ConstructorHelpers.h"
@@ -29,11 +30,7 @@ ATOHCarrieHologram::ATOHCarrieHologram()
 
     Tags.Add(TEXT("Carrie"));
 
-    static ConstructorHelpers::FObjectFinder<UTexture2D> CarrieTexObj(TEXT("/Game/Textures/TOH_Carrie"));
-    if (CarrieTexObj.Succeeded())
-    {
-        CarrieTexture = CarrieTexObj.Object;
-    }
+    CarrieTexture = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Carrie.png"));
 }
 
 void ATOHCarrieHologram::BeginPlay()
