@@ -69,6 +69,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UStaticMeshComponent* BodyMesh;
 
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
+    class UProceduralMeshComponent* LonzoModel;
+
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
 
