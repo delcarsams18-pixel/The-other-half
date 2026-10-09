@@ -50,4 +50,10 @@ protected:
 
     UPROPERTY()
     class ATOHCharacter* PlayerRef = nullptr;
+
+    UPROPERTY()
+    class UStaticMesh* CubeMeshAsset = nullptr;
+
+    UPROPERTY()
+    class UStaticMesh* PlaneMeshAsset = nullptr;
 };
