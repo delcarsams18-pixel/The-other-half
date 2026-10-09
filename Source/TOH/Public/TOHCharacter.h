@@ -26,7 +26,7 @@ public:
     float MoveSpeed = 600.0f;
 
     UFUNCTION(BlueprintCallable, Category = "TOH")
-    void TakeDamage(float Amount);
+    void ApplyDamage(float Amount);
 
     UFUNCTION(BlueprintCallable, Category = "TOH")
     bool IsAlive() const { return Health > 0.0f; }
