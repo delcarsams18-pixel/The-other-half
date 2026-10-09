@@ -70,6 +70,9 @@ ATOHCharacter::ATOHCharacter()
     }
 
     BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+    
+    LonzoModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("LonzoModel"));
+    LonzoModel->SetupAttachment(GetMesh());
     static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMeshAsset(TEXT("/Engine/BasicShapes/Cube"));
     if (BodyMeshAsset.Succeeded())
     {
