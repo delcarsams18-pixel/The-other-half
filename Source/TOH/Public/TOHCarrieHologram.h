@@ -21,4 +21,7 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "TOH")
     class UPointLightComponent* GlowLight;
+
+    UPROPERTY()
+    class UTexture2D* CarrieTexture = nullptr;
 };
