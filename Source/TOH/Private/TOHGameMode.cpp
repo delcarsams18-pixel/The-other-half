@@ -74,50 +74,105 @@ void ATOHGameMode::BuildDistrict()
         return Box;
     };
 
+    // Ground - city streets (dark asphalt)
     if (PlaneMeshAsset)
     {
         AStaticMeshActor* Ground = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
         UStaticMeshComponent* GComp = Ground->GetStaticMeshComponent();
         GComp->SetStaticMesh(PlaneMeshAsset);
-        GComp->SetWorldScale3D(FVector(60.0f, 60.0f, 1.0f));
+        GComp->SetWorldScale3D(FVector(80.0f, 80.0f, 1.0f));
         UMaterialInstanceDynamic* GMat = GComp->CreateDynamicMaterialInstance(0);
         if (GMat)
         {
-            GMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.02f, 0.02f, 0.03f));
+            GMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.03f, 0.03f, 0.04f));
         }
     }
 
+    // City grid: 5x5 blocks with streets between
     FMath::RandInit(1337);
-    for (int32 i = 0; i < 24; i++)
+    const float BlockSize = 1200.0f;
+    const float StreetWidth = 400.0f;
+    const float CellSize = BlockSize + StreetWidth;
+    
+    for (int32 gx = -2; gx <= 2; gx++)
     {
-        float Angle = (i / 24.0f) * 2.0f * PI;
-        float Radius = 1200.0f + FMath::RandRange(0.0f, 800.0f);
-        float H = FMath::RandRange(400.0f, 1400.0f);
-        float W = FMath::RandRange(200.0f, 400.0f);
-        FVector Loc(FMath::Cos(Angle) * Radius, FMath::Sin(Angle) * Radius, H * 0.5f);
-        FLinearColor BColor(0.03f, 0.04f, 0.06f);
-        AStaticMeshActor* B = MakeBox(Loc, FVector(W / 100.0f, W / 100.0f, H / 100.0f), BColor);
-
-        if (i % 3 == 0)
+        for (int32 gy = -2; gy <= 2; gy++)
         {
-            FLinearColor Neon = (i % 2 == 0) ? FLinearColor(0.1f, 0.5f, 1.0f) : FLinearColor(1.0f, 0.4f, 0.1f);
-            MakeBox(Loc + FVector(0, 0, H * 0.5f + 10), FVector(W / 100.0f * 1.02f, W / 100.0f * 1.02f, 0.15f), Neon, 4.0f);
+            // Skip center block (plaza/spawn area)
+            if (gx == 0 && gy == 0) continue;
+            
+            float BX = gx * CellSize;
+            float BY = gy * CellSize;
+            
+            // Each block has 1-4 buildings
+            int32 NumBuildings = FMath::RandRange(1, 3);
+            for (int32 b = 0; b < NumBuildings; b++)
+            {
+                float BW = FMath::RandRange(300.0f, 700.0f);
+                float BD = FMath::RandRange(300.0f, 700.0f);
+                float BH = FMath::RandRange(500.0f, 2000.0f);
+                float OX = FMath::RandRange(-200.0f, 200.0f);
+                float OY = FMath::RandRange(-200.0f, 200.0f);
+                
+                FVector Loc(BX + OX, BY + OY, BH * 0.5f);
+                // Building colors: dark grays/blues with variation
+                float V = FMath::RandRange(0.03f, 0.08f);
+                FLinearColor BColor(V, V * 1.2f, V * 1.5f);
+                MakeBox(Loc, FVector(BW / 100.0f, BD / 100.0f, BH / 100.0f), BColor);
+                
+                // Neon signs on some buildings
+                if (FMath::RandRange(0, 2) == 0)
+                {
+                    FLinearColor Neon;
+                    int32 NC = FMath::RandRange(0, 3);
+                    if (NC == 0) Neon = FLinearColor(0.1f, 0.5f, 1.0f);      // Blue
+                    else if (NC == 1) Neon = FLinearColor(1.0f, 0.2f, 0.5f); // Pink
+                    else if (NC == 2) Neon = FLinearColor(0.2f, 1.0f, 0.5f); // Green
+                    else Neon = FLinearColor(1.0f, 0.6f, 0.1f);             // Orange
+                    float SignH = BH * FMath::RandRange(0.6f, 0.9f);
+                    MakeBox(FVector(BX + OX, BY + OY + BD/2 + 5, SignH), FVector(BW/100.0f*0.8f, 0.1f, 0.4f), Neon, 5.0f);
+                }
+                
+                // Windows (emissive strips)
+                if (BH > 800.0f)
+                {
+                    int32 Floors = (int32)(BH / 150.0f);
+                    for (int32 fl = 0; fl < Floors; fl += 2)
+                    {
+                        float WY = BH * 0.1f + fl * 150.0f;
+                        if (WY < BH * 0.95f)
+                        {
+                            FLinearColor WinColor(1.0f, 0.8f, 0.4f);
+                            MakeBox(FVector(BX + OX, BY + OY + BD/2 + 2, WY), FVector(BW/100.0f*0.9f, 0.05f, 0.2f), WinColor, 2.0f);
+                        }
+                    }
+                }
+            }
         }
     }
-
-    ADirectionalLight* Sun = World->SpawnActor<ADirectionalLight>(ADirectionalLight::StaticClass(), FVector::ZeroVector, FRotator(-50.0f, -30.0f, 0.0f));
-    Sun->GetLightComponent()->SetIntensity(0.4f);
-    Sun->GetLightComponent()->SetLightColor(FLinearColor(0.4f, 0.5f, 0.8f));
-
-    for (int32 i = 0; i < 8; i++)
+    
+    // Street lights along main roads
+    for (int32 i = -2; i <= 2; i++)
     {
-        float Angle = (i / 8.0f) * 2.0f * PI;
-        FVector Loc(FMath::Cos(Angle) * 700.0f, FMath::Sin(Angle) * 700.0f, 300.0f);
-        FLinearColor LC = (i % 2 == 0) ? FLinearColor(0.2f, 0.6f, 1.0f) : FLinearColor(1.0f, 0.5f, 0.15f);
-        MakeBox(Loc, FVector(0.3f, 0.3f, 6.0f), FLinearColor(0.05f, 0.05f, 0.05f));
-        MakeBox(Loc + FVector(0, 0, 320), FVector(1.5f, 1.5f, 0.5f), LC, 6.0f);
+        float Pos = i * CellSize;
+        // X-axis street lights
+        MakeBox(FVector(Pos, -StreetWidth/2, 300), FVector(0.3f, 0.3f, 6.0f), FLinearColor(0.05f, 0.05f, 0.05f));
+        MakeBox(FVector(Pos, -StreetWidth/2, 620), FVector(1.2f, 1.2f, 0.4f), FLinearColor(0.3f, 0.6f, 1.0f), 6.0f);
+        MakeBox(FVector(Pos, StreetWidth/2, 300), FVector(0.3f, 0.3f, 6.0f), FLinearColor(0.05f, 0.05f, 0.05f));
+        MakeBox(FVector(Pos, StreetWidth/2, 620), FVector(1.2f, 1.2f, 0.4f), FLinearColor(0.3f, 0.6f, 1.0f), 6.0f);
+        // Z-axis street lights
+        MakeBox(FVector(-StreetWidth/2, Pos, 300), FVector(0.3f, 0.3f, 6.0f), FLinearColor(0.05f, 0.05f, 0.05f));
+        MakeBox(FVector(-StreetWidth/2, Pos, 620), FVector(1.2f, 1.2f, 0.4f), FLinearColor(1.0f, 0.5f, 0.15f), 6.0f);
+        MakeBox(FVector(StreetWidth/2, Pos, 300), FVector(0.3f, 0.3f, 6.0f), FLinearColor(0.05f, 0.05f, 0.05f));
+        MakeBox(FVector(StreetWidth/2, Pos, 620), FVector(1.2f, 1.2f, 0.4f), FLinearColor(1.0f, 0.5f, 0.15f), 6.0f);
     }
+
+    // Lighting
+    ADirectionalLight* Sun = World->SpawnActor<ADirectionalLight>(ADirectionalLight::StaticClass(), FVector::ZeroVector, FRotator(-50.0f, -30.0f, 0.0f));
+    Sun->GetLightComponent()->SetIntensity(0.35f);
+    Sun->GetLightComponent()->SetLightColor(FLinearColor(0.4f, 0.5f, 0.8f));
 }
+
 
 void ATOHGameMode::SpawnEnemies()
 {
