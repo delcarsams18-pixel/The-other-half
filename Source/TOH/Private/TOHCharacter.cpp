@@ -75,9 +75,10 @@ void ATOHCharacter::Tick(float DeltaTime)
             PC->GetViewportSize(SX, SY);
             if (TouchStart.X < SX * 0.5f)
             {
-                FVector2D Drag;
-                PC->GetInputTouchState(TouchFinger, Drag.X, Drag.Y);
-                FVector2D Delta = Drag - FVector2D(TouchStart.X, TouchStart.Y);
+                float TX = 0.0f, TY = 0.0f;
+                bool bPressed = false;
+                PC->GetInputTouchState(TouchFinger, TX, TY, bPressed);
+                FVector2D Delta = FVector2D(TX, TY) - FVector2D(TouchStart.X, TouchStart.Y);
                 if (Delta.Size() > 20.0f)
                 {
                     const FRotator YawRot(0.0f, Controller->GetControlRotation().Yaw, 0.0f);
@@ -89,12 +90,13 @@ void ATOHCharacter::Tick(float DeltaTime)
             }
             else
             {
-                FVector2D Drag;
-                PC->GetInputTouchState(TouchFinger, Drag.X, Drag.Y);
-                FVector2D Delta = Drag - FVector2D(TouchStart.X, TouchStart.Y);
+                float TX = 0.0f, TY = 0.0f;
+                bool bPressed = false;
+                PC->GetInputTouchState(TouchFinger, TX, TY, bPressed);
+                FVector2D Delta = FVector2D(TX, TY) - FVector2D(TouchStart.X, TouchStart.Y);
                 AddControllerYawInput(Delta.X * 0.005f);
                 AddControllerPitchInput(-Delta.Y * 0.005f);
-                TouchStart = FVector(Drag.X, Drag.Y, 0);
+                TouchStart = FVector(TX, TY, 0);
             }
         }
     }
@@ -186,7 +188,7 @@ void ATOHCharacter::Fire()
     GetWorld()->SpawnActor<ATOHProjectile>(ProjectileClass, Muzzle, Dir, Params);
 }
 
-void ATOHCharacter::TakeDamage(float Amount)
+void ATOHCharacter::ApplyDamage(float Amount)
 {
     if (!IsAlive()) return;
     Health = FMath::Max(0.0f, Health - Amount);
