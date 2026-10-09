@@ -1,5 +1,7 @@
 #include "TOHCharacter.h"
 #include "TOHProjectile.h"
+#include "TOHGLBLoader.h"
+#include "ProceduralMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -82,6 +84,19 @@ void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
     Health = MaxHealth;
+
+    UProceduralMeshComponent* LonzoModel = UTOHGLBLoader::LoadGLBAsMesh(this, TEXT("Lonzo.glb"));
+    if (LonzoModel)
+    {
+        LonzoModel->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+        LonzoModel->SetRelativeLocation(FVector(0, 0, -90));
+        LonzoModel->SetRelativeScale3D(FVector(1.0f));
+        LonzoModel->RegisterComponent();
+        if (BodyMesh)
+        {
+            BodyMesh->SetVisibility(false);
+        }
+    }
 
     if (ArmCannon)
     {
