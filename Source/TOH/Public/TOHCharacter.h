@@ -58,6 +58,15 @@ protected:
     class UStaticMeshComponent* ArmCannon;
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
+    class UStaticMeshComponent* GunBody;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
+    class UStaticMeshComponent* GunBarrel;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
+    class UStaticMeshComponent* GunGrip;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UStaticMeshComponent* BodyMesh;
 
     UFUNCTION()
