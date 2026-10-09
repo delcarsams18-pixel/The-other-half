@@ -41,6 +41,16 @@ ATOHCharacter::ATOHCharacter()
     }
     ArmCannon->SetupAttachment(GetMesh());
 
+    BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMeshAsset(TEXT("/Engine/BasicShapes/Cube"));
+    if (BodyMeshAsset.Succeeded())
+    {
+        BodyMesh->SetStaticMesh(BodyMeshAsset.Object);
+        BodyMesh->SetRelativeScale3D(FVector(1.0f, 1.0f, 1.8f));
+        BodyMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
+    }
+    BodyMesh->SetupAttachment(GetMesh());
+
     ProjectileClass = ATOHProjectile::StaticClass();
 }
 
