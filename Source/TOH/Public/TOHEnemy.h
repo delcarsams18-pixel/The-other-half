@@ -34,7 +34,7 @@ public:
     float AttackCooldown = 1.2f;
 
     UFUNCTION(BlueprintCallable, Category = "TOH")
-    void TakeDamage(float Amount);
+    void ApplyDamage(float Amount);
 
     UFUNCTION(BlueprintCallable, Category = "TOH")
     bool IsAlive() const { return Health > 0.0f; }
