@@ -3,6 +3,7 @@
 #include "TOHGLBLoader.h"
 #include "LonzoMeshData.h"
 #include "Materials/Material.h"
+#include "MaterialShared.h"
 #include "ProceduralMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
