@@ -80,7 +80,7 @@ void ATOHGameMode::BuildDistrict()
         AStaticMeshActor* Ground = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
         UStaticMeshComponent* GComp = Ground->GetStaticMeshComponent();
         GComp->SetStaticMesh(PlaneMeshAsset);
-        GComp->SetWorldScale3D(FVector(80.0f, 80.0f, 1.0f));
+        GComp->SetWorldScale3D(FVector(110.0f, 110.0f, 1.0f));
         UMaterialInstanceDynamic* GMat = GComp->CreateDynamicMaterialInstance(0);
         if (GMat)
         {
@@ -88,18 +88,29 @@ void ATOHGameMode::BuildDistrict()
         }
     }
 
-    // City grid: 5x5 blocks with streets between
+    // City grid: 7x7 blocks with streets between, district variation
     FMath::RandInit(1337);
     const float BlockSize = 1200.0f;
     const float StreetWidth = 400.0f;
     const float CellSize = BlockSize + StreetWidth;
     
-    for (int32 gx = -2; gx <= 2; gx++)
+    for (int32 gx = -3; gx <= 3; gx++)
     {
-        for (int32 gy = -2; gy <= 2; gy++)
+        for (int32 gy = -3; gy <= 3; gy++)
         {
             // Skip center block (plaza/spawn area)
             if (gx == 0 && gy == 0) continue;
+            
+            // District type based on position
+            // North (gy>0): Corporate (tall, blue)
+            // South (gy<0): Industrial (short, orange/rust)
+            // East (gx>0): Neon/Entertainment (colorful)
+            // West (gx<0): Residential (medium, warm)
+            int32 District = 0;
+            if (gy >= 2) District = 1;      // North corporate
+            else if (gy <= -2) District = 2; // South industrial
+            else if (gx >= 2) District = 3;  // East neon
+            else if (gx <= -2) District = 4; // West residential
             
             float BX = gx * CellSize;
             float BY = gy * CellSize;
@@ -152,7 +163,7 @@ void ATOHGameMode::BuildDistrict()
     }
     
     // Street lights along main roads
-    for (int32 i = -2; i <= 2; i++)
+    for (int32 i = -3; i <= 3; i++)
     {
         float Pos = i * CellSize;
         // X-axis street lights
