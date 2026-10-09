@@ -1,6 +1,7 @@
 #include "TOHHUD.h"
 #include "TOHCharacter.h"
 #include "TOHGameMode.h"
+#include "TOHArtLoader.h"
 #include "Engine/Canvas.h"
 #include "Engine/Texture2D.h"
 #include "UObject/ConstructorHelpers.h"
@@ -18,11 +19,7 @@ void ATOHHUD::DrawHUD()
 
 ATOHHUD::ATOHHUD()
 {
-    static ConstructorHelpers::FObjectFinder<UTexture2D> LonzoTexObj(TEXT("/Game/Textures/TOH_Lonzo"));
-    if (LonzoTexObj.Succeeded())
-    {
-        LonzoPortrait = LonzoTexObj.Object;
-    }
+    LonzoPortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Lonzo.png"));
 }
 
 void ATOHHUD::DrawHealthBar()
