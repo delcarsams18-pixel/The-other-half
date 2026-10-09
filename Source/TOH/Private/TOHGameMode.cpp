@@ -195,7 +195,8 @@ void ATOHGameMode::SpawnCarrieMarker()
     UWorld* World = GetWorld();
     if (!World) return;
 
-    CarrieMarker = World->SpawnActor<ATOHCarrieHologram>(ATOHCarrieHologram::StaticClass(), FVector(0, 0, 150), FRotator::ZeroRotator);
+    // Carrie is held at the north end of the city - player must fight through to reach her
+    CarrieMarker = World->SpawnActor<ATOHCarrieHologram>(ATOHCarrieHologram::StaticClass(), FVector(0, 3200, 100), FRotator::ZeroRotator);
 }
 
 void ATOHGameMode::OnEnemyKilled()
