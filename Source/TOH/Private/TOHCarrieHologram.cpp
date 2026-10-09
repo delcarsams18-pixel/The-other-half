@@ -57,7 +57,10 @@ void ATOHCarrieHologram::BeginPlay()
         int32 NumVerts = sizeof(Carrie_Vertices) / sizeof(float) / 3;
         for (int32 i = 0; i < NumVerts; i++)
         {
-            Vertices.Add(FVector(Carrie_Vertices[i*3], Carrie_Vertices[i*3+1], Carrie_Vertices[i*3+2]));
+            float GX = Carrie_Vertices[i*3];
+            float GY = Carrie_Vertices[i*3+1];
+            float GZ = Carrie_Vertices[i*3+2];
+            Vertices.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f));
             Normals.Add(FVector(0, 0, 1));
             UVs.Add(FVector2D(0, 0));
             Colors.Add(FLinearColor::White);
@@ -74,7 +77,7 @@ void ATOHCarrieHologram::BeginPlay()
         {
             CarrieModel->SetMaterial(0, BaseMat);
         }
-        CarrieModel->SetRelativeLocation(FVector(0, 0, -90));
+        CarrieModel->SetRelativeLocation(FVector(0, 0, -50));
         if (HologramPlane)
         {
             HologramPlane->SetVisibility(false);
