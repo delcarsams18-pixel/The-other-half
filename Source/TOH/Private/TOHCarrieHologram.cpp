@@ -3,6 +3,7 @@
 #include "TOHGLBLoader.h"
 #include "CarrieMeshData.h"
 #include "Materials/Material.h"
+#include "MaterialShared.h"
 #include "ProceduralMeshComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PointLightComponent.h"
