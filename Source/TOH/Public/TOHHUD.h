@@ -21,4 +21,13 @@ protected:
 
     UPROPERTY()
     class UTexture2D* LonzoPortrait = nullptr;
+
+    UPROPERTY()
+    class UTexture2D* CarriePortrait = nullptr;
+
+    UPROPERTY()
+    TArray<class UTexture2D*> VillainPortraits;
+
+    void DrawCharacterArt();
+    void DrawEnemyMarkers();
 };
