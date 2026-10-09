@@ -10,10 +10,15 @@ class TOH_API ATOHHUD : public AHUD
     GENERATED_BODY()
 
 public:
+    ATOHHUD();
+
     virtual void DrawHUD() override;
 
 protected:
     void DrawHealthBar();
     void DrawObjective();
     void DrawEndScreen();
+
+    UPROPERTY()
+    class UTexture2D* LonzoPortrait = nullptr;
 };
