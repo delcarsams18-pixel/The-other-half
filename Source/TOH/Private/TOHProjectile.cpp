@@ -77,7 +77,7 @@ void ATOHProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
         ATOHCharacter* Player = Cast<ATOHCharacter>(OtherActor);
         if (Player)
         {
-            Player->TakeDamage(Damage);
+            Player->ApplyDamage(Damage);
         }
     }
     else
@@ -85,7 +85,7 @@ void ATOHProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
         ATOHEnemy* Enemy = Cast<ATOHEnemy>(OtherActor);
         if (Enemy)
         {
-            Enemy->TakeDamage(Damage);
+            Enemy->ApplyDamage(Damage);
         }
     }
     Destroy();
