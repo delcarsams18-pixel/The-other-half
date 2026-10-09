@@ -103,7 +103,11 @@ void ATOHCharacter::BeginPlay()
         int32 NumVerts = sizeof(Lonzo_Vertices) / sizeof(float) / 3;
         for (int32 i = 0; i < NumVerts; i++)
         {
-            Vertices.Add(FVector(Lonzo_Vertices[i*3], Lonzo_Vertices[i*3+1], Lonzo_Vertices[i*3+2]));
+            // GLB Y-up to Unreal Z-up: (X, Y, Z) -> (X, -Z, Y), scale to cm
+            float GX = Lonzo_Vertices[i*3];
+            float GY = Lonzo_Vertices[i*3+1];
+            float GZ = Lonzo_Vertices[i*3+2];
+            Vertices.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f));
             Normals.Add(FVector(0, 0, 1));
             UVs.Add(FVector2D(0, 0));
             Colors.Add(FLinearColor::White);
@@ -120,7 +124,7 @@ void ATOHCharacter::BeginPlay()
         {
             LonzoModel->SetMaterial(0, BaseMat);
         }
-        LonzoModel->SetRelativeLocation(FVector(0, 0, -90));
+        LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
         if (BodyMesh)
         {
             BodyMesh->SetVisibility(false);
