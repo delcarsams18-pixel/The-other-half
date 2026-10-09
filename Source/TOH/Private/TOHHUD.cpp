@@ -64,8 +64,8 @@ void ATOHHUD::DrawEnemyMarkers()
 
 ATOHHUD::ATOHHUD()
 {
-    LonzoPortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Lonzo.png"));
-    CarriePortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Carrie.png"));
+    LonzoPortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Lonzo_Full.png"));
+    CarriePortrait = UTOHArtLoader::LoadPNGFromFile(TEXT("TOH_Carrie_Full.png"));
 
     TArray<FString> VillainFiles = {
         TEXT("TOH_Villain_Warden.png"),
