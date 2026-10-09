@@ -14,7 +14,10 @@ public class TOH : ModuleRules
             "EnhancedInput",
             "ImageWrapper",
             "RenderCore",
-            "RHI"
+            "RHI",
+            "ProceduralMeshComponent",
+            "Json",
+            "JsonUtilities"
         });
 
         if (Target.Platform == UnrealTargetPlatform.Android)
