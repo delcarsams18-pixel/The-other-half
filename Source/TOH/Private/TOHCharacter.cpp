@@ -91,8 +91,8 @@ void ATOHCharacter::BeginPlay()
     Health = MaxHealth;
 
     // Build Lonzo 3D model from embedded mesh data
+    if (LonzoModel)
     {
-        UProceduralMeshComponent* LonzoModel = NewObject<UProceduralMeshComponent>(this);
         TArray<FVector> Vertices;
         TArray<int32> Triangles;
         TArray<FVector> Normals;
@@ -120,9 +120,7 @@ void ATOHCharacter::BeginPlay()
         {
             LonzoModel->SetMaterial(0, BaseMat);
         }
-        LonzoModel->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
         LonzoModel->SetRelativeLocation(FVector(0, 0, -90));
-        LonzoModel->RegisterComponent();
         if (BodyMesh)
         {
             BodyMesh->SetVisibility(false);
