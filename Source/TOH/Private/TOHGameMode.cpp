@@ -1,131 +1,183 @@
-#include "Hero.h"
+#include "TOHGameMode.h"
 #include "TOHCharacter.h"
-#include "TOHBossCharacter.h"
+#include "TOHEnemy.h"
+#include "TOHProjectile.h"
+#include "TOHHUD.h"
+#include "Engine/StaticMeshActor.h"
+#include "Components/StaticMeshComponent.h"
+#include "UObject/ConstructorHelpers.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/DirectionalLight.h"
+#include "Engine/SkyLight.h"
+#include "Components/DirectionalLightComponent.h"
 
 ATOHGameMode::ATOHGameMode()
 {
     DefaultPawnClass = ATOHCharacter::StaticClass();
+    HUDClass = ATOHHUD::StaticClass();
+    PlayerControllerClass = APlayerController::StaticClass();
+
+    EnemyClass = ATOHEnemy::StaticClass();
+    ProjectileClass = ATOHProjectile::StaticClass();
 }
 
-void ATOHGameMode::Load()
+void ATOHGameMode::BeginPlay()
 {
-    AllHeroes.Empty();
-    Villains.Empty();
-    Districts.Empty();
-
-    auto AddUnder = [](FTOHUnder& Under, const FString& InLevel, const FString& InName, int32 InHP, int32 InDMG, const FString& InDesc)
-    {
-        Under.Level = InLevel;
-        Under.Name = InName;
-        Under.HP = InHP;
-        Under.DMG = InDMG;
-        Under.Desc = InDesc;
-    };
-
-    auto AddHero = [&](const FString& InId, const FString& InName, const FString& InRole, const FString& InTech,
-        const FString& InA1, const FString& InA2, const FString& InA3, const FString& InNote,
-        const FString& InDistrict, const FString& InFaction)
-    {
-        FTOHHero Hero;
-        Hero.Id = InId;
-        Hero.Name = InName;
-        Hero.Role = InRole;
-        Hero.Tech = InTech;
-        Hero.A1 = InA1;
-        Hero.A2 = InA2;
-        Hero.A3 = InA3;
-        Hero.Note = InNote;
-        Hero.District = InDistrict;
-        Hero.Faction = InFaction;
-
-        FTOHUnder U1, U2, U3;
-        AddUnder(U1, TEXT("T1"), TEXT("Under_T1"), 100, 20, TEXT("Basic"));
-        AddUnder(U2, TEXT("T2"), TEXT("Under_T2"), 150, 35, TEXT("Mid"));
-        AddUnder(U3, TEXT("T3"), TEXT("Under_T3"), 200, 50, TEXT("Elite"));
-
-        Hero.Unders.Add(U1);
-        Hero.Unders.Add(U2);
-        Hero.Unders.Add(U3);
-
-        AllHeroes.Add(Hero);
-    };
-
-    auto AddVillain = [&](const FString& InId, const FString& InName, const FString& InRole,
-        const FString& InDistrict, const FString& InThreat, const FString& InTrait, int32 InHP, int32 InDMG)
-    {
-        FTOHVillain Villain;
-        Villain.Id = InId;
-        Villain.Name = InName;
-        Villain.Role = InRole;
-        Villain.District = InDistrict;
-        Villain.Threat = InThreat;
-        Villain.Trait = InTrait;
-        Villain.HP = InHP;
-        Villain.DMG = InDMG;
-        Villains.Add(Villain);
-    };
-
-    auto AddDistrict = [&](const FString& InId, const FString& InName, const FString& InDesc, const FString& InControl, const FString& InAtmosphere)
-    {
-        FTOHDistrict District;
-        District.Id = InId;
-        District.Name = InName;
-        District.Description = InDesc;
-        District.Control = InControl;
-        District.Atmosphere = InAtmosphere;
-        Districts.Add(District);
-    };
-
-    // LONZO - BLUE PULSE GATLING ARM
-    AddHero(TEXT("lonzo"), TEXT("Lonzo Tech Specialist"), TEXT("Support / Ranged"), TEXT("Gatling Gun Robot Arm"),
-        TEXT("Gatling Barrage"), TEXT("Pulse Shock"), TEXT("Arm Shield"),
-        TEXT("Lonzo fires rapid blue pulse rounds from his gatling gun cyber arm. He carries the energy of The Other Half and protects the city core."), TEXT("Benway City"), TEXT("Hero"));
-
-    // CARRIE - TELEKINESIS + AI BRAIN
-    AddHero(TEXT("carrie"), TEXT("Carrie Cyber Psionic"), TEXT("Controller / Support"), TEXT("AI Brain + Energy Core"),
-        TEXT("Telekinetic Crush"), TEXT("Mental Override"), TEXT("Core Sync"),
-        TEXT("Carrie uses telekinesis, AI mental control, and psionic energy to control the battlefield and defend the city core."), TEXT("Benway City"), TEXT("Hero"));
-
-    // BOSS
-    AddVillain(TEXT("warden"), TEXT("The Warden"), TEXT("Prison Boss"), TEXT("Prison District"), TEXT("Extreme"), TEXT("Security control and mental fortification"), 500, 70);
-
-    // DISTRICTS
-    AddDistrict(TEXT("prison"), TEXT("Prison District"), TEXT("Metal cells, security towers, and brutal security systems. The Warden controls the prison from a fortified tower."), TEXT("The Warden"), TEXT("Harsh and oppressive"));
-    AddDistrict(TEXT("benway"), TEXT("Benway City"), TEXT("The heart of the city. Neon towers, blue energy conduits, and street-level chaos. The city is under pressure to recover."), TEXT("Operation Recover"), TEXT("Bright, unstable, and alive"));
+    Super::BeginPlay();
+    PlayerRef = Cast<ATOHCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+    BuildDistrict();
+    SpawnEnemies();
+    SpawnCarrieMarker();
 }
 
-FTOHHero ATOHGameMode::GetHeroById(const FString& HeroId) const
+void ATOHGameMode::Tick(float DeltaTime)
 {
-    for (const FTOHHero& Hero : AllHeroes)
+    Super::Tick(DeltaTime);
+    CheckWinLose();
+}
+
+void ATOHGameMode::BuildDistrict()
+{
+    UWorld* World = GetWorld();
+    if (!World) return;
+
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube"));
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneMesh(TEXT("/Engine/BasicShapes/Plane"));
+    if (!CubeMesh.Succeeded()) return;
+
+    auto MakeBox = [&](FVector Loc, FVector Scale, FLinearColor Color, float Emissive = 0.0f) -> AStaticMeshActor*
     {
-        if (Hero.Id.Equals(HeroId, ESearchCase::IgnoreCase))
+        AStaticMeshActor* Box = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Loc, FRotator::ZeroRotator);
+        UStaticMeshComponent* Comp = Box->GetStaticMeshComponent();
+        Comp->SetStaticMesh(CubeMesh.Object);
+        Comp->SetWorldScale3D(Scale);
+        Comp->SetMobility(EComponentMobility::Static);
+        UMaterialInstanceDynamic* Mat = Comp->CreateDynamicMaterialInstance(0);
+        if (Mat)
         {
-            return Hero;
+            Mat->SetVectorParameterValue(TEXT("BaseColor"), Color);
+            if (Emissive > 0.0f)
+            {
+                Mat->SetVectorParameterValue(TEXT("EmissiveColor"), Color);
+                Mat->SetScalarParameterValue(TEXT("EmissiveIntensity"), Emissive);
+            }
+        }
+        return Box;
+    };
+
+    if (PlaneMesh.Succeeded())
+    {
+        AStaticMeshActor* Ground = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
+        UStaticMeshComponent* GComp = Ground->GetStaticMeshComponent();
+        GComp->SetStaticMesh(PlaneMesh.Object);
+        GComp->SetWorldScale3D(FVector(60.0f, 60.0f, 1.0f));
+        UMaterialInstanceDynamic* GMat = GComp->CreateDynamicMaterialInstance(0);
+        if (GMat)
+        {
+            GMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.02f, 0.02f, 0.03f));
         }
     }
 
-    return FTOHHero();
-}
-
-FTOHVillain ATOHGameMode::GetVillainById(const FString& VillainId) const
-{
-    for (const FTOHVillain& Villain : Villains)
+    FMath::RandInit(1337);
+    for (int32 i = 0; i < 24; i++)
     {
-        if (Villain.Id.Equals(VillainId, ESearchCase::IgnoreCase))
+        float Angle = (i / 24.0f) * 2.0f * PI;
+        float Radius = 1200.0f + FMath::RandRange(0.0f, 800.0f);
+        float H = FMath::RandRange(400.0f, 1400.0f);
+        float W = FMath::RandRange(200.0f, 400.0f);
+        FVector Loc(FMath::Cos(Angle) * Radius, FMath::Sin(Angle) * Radius, H * 0.5f);
+        FLinearColor BColor(0.03f, 0.04f, 0.06f);
+        AStaticMeshActor* B = MakeBox(Loc, FVector(W / 100.0f, W / 100.0f, H / 100.0f), BColor);
+
+        if (i % 3 == 0)
         {
-            return Villain;
+            FLinearColor Neon = (i % 2 == 0) ? FLinearColor(0.1f, 0.5f, 1.0f) : FLinearColor(1.0f, 0.4f, 0.1f);
+            MakeBox(Loc + FVector(0, 0, H * 0.5f + 10), FVector(W / 100.0f * 1.02f, W / 100.0f * 1.02f, 0.15f), Neon, 4.0f);
         }
     }
 
-    return FTOHVillain();
+    ADirectionalLight* Sun = World->SpawnActor<ADirectionalLight>(ADirectionalLight::StaticClass(), FVector::ZeroVector, FRotator(-50.0f, -30.0f, 0.0f));
+    Sun->GetLightComponent()->SetIntensity(0.4f);
+    Sun->GetLightComponent()->SetLightColor(FLinearColor(0.4f, 0.5f, 0.8f));
+
+    for (int32 i = 0; i < 8; i++)
+    {
+        float Angle = (i / 8.0f) * 2.0f * PI;
+        FVector Loc(FMath::Cos(Angle) * 700.0f, FMath::Sin(Angle) * 700.0f, 300.0f);
+        FLinearColor LC = (i % 2 == 0) ? FLinearColor(0.2f, 0.6f, 1.0f) : FLinearColor(1.0f, 0.5f, 0.15f);
+        MakeBox(Loc, FVector(0.3f, 0.3f, 6.0f), FLinearColor(0.05f, 0.05f, 0.05f));
+        MakeBox(Loc + FVector(0, 0, 320), FVector(1.5f, 1.5f, 0.5f), LC, 6.0f);
+    }
 }
 
-TArray<FTOHHero> ATOHGameMode::GetHeroRoster() const
+void ATOHGameMode::SpawnEnemies()
 {
-    return AllHeroes;
+    UWorld* World = GetWorld();
+    if (!World || !EnemyClass) return;
+
+    EnemiesRemaining = NumEnemies;
+    for (int32 i = 0; i < NumEnemies; i++)
+    {
+        float Angle = FMath::RandRange(0.0f, 2.0f * PI);
+        float Radius = FMath::RandRange(600.0f, 1800.0f);
+        FVector Loc(FMath::Cos(Angle) * Radius, FMath::Sin(Angle) * Radius, 100.0f);
+        FActorSpawnParameters Params;
+        ATOHEnemy* E = World->SpawnActor<ATOHEnemy>(EnemyClass, Loc, FRotator::ZeroRotator, Params);
+    }
 }
 
-TArray<FTOHDistrict> ATOHGameMode::GetDistricts() const
+void ATOHGameMode::SpawnCarrieMarker()
 {
-    return Districts;
+    UWorld* World = GetWorld();
+    if (!World) return;
+
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube"));
+    if (!CubeMesh.Succeeded()) return;
+
+    CarrieMarker = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector(0, 0, 150), FRotator::ZeroRotator);
+    UStaticMeshComponent* Comp = CarrieMarker->GetStaticMeshComponent();
+    Comp->SetStaticMesh(CubeMesh.Object);
+    Comp->SetWorldScale3D(FVector(2.0f, 2.0f, 4.0f));
+    UMaterialInstanceDynamic* Mat = Comp->CreateDynamicMaterialInstance(0);
+    if (Mat)
+    {
+        Mat->SetVectorParameterValue(TEXT("EmissiveColor"), FLinearColor(0.6f, 0.2f, 1.0f));
+        Mat->SetScalarParameterValue(TEXT("EmissiveIntensity"), 5.0f);
+    }
+    CarrieMarker->Tags.Add(TEXT("Carrie"));
+}
+
+void ATOHGameMode::OnEnemyKilled()
+{
+    EnemiesRemaining = FMath::Max(0, EnemiesRemaining - 1);
+}
+
+void ATOHGameMode::OnPlayerDied()
+{
+    bGameLost = true;
+}
+
+void ATOHGameMode::CheckWinLose()
+{
+    if (bGameWon || bGameLost || !PlayerRef) return;
+
+    if (!PlayerRef->IsAlive())
+    {
+        OnPlayerDied();
+        return;
+    }
+
+    TArray<AActor*> Enemies;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ATOHEnemy::StaticClass(), Enemies);
+    EnemiesRemaining = Enemies.Num();
+
+    if (EnemiesRemaining == 0 && CarrieMarker)
+    {
+        float Dist = FVector::Dist(PlayerRef->GetActorLocation(), CarrieMarker->GetActorLocation());
+        if (Dist < 400.0f)
+        {
+            bGameWon = true;
+        }
+    }
 }
