@@ -1,6 +1,7 @@
 #include "TOHCharacter.h"
 #include "TOHProjectile.h"
 #include "TOHGLBLoader.h"
+#include "LonzoMeshData.h"
 #include "ProceduralMeshComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -85,12 +86,33 @@ void ATOHCharacter::BeginPlay()
     Super::BeginPlay();
     Health = MaxHealth;
 
-    UProceduralMeshComponent* LonzoModel = UTOHGLBLoader::LoadGLBAsMesh(this, TEXT("Lonzo.glb"));
-    if (LonzoModel)
+    // Build Lonzo 3D model from embedded mesh data
     {
+        UProceduralMeshComponent* LonzoModel = NewObject<UProceduralMeshComponent>(this);
+        TArray<FVector> Vertices;
+        TArray<int32> Triangles;
+        TArray<FVector> Normals;
+        TArray<FVector2D> UVs;
+        TArray<FColor> Colors;
+        TArray<FProcMeshTangent> Tangents;
+        
+        int32 NumVerts = sizeof(Lonzo_Vertices) / sizeof(float) / 3;
+        for (int32 i = 0; i < NumVerts; i++)
+        {
+            Vertices.Add(FVector(Lonzo_Vertices[i*3], Lonzo_Vertices[i*3+1], Lonzo_Vertices[i*3+2]));
+            Normals.Add(FVector(0, 0, 1));
+            UVs.Add(FVector2D(0, 0));
+            Colors.Add(FColor::White);
+            Tangents.Add(FProcMeshTangent(1, 0, 0));
+        }
+        int32 NumIdx = sizeof(Lonzo_Indices) / sizeof(uint32);
+        for (int32 i = 0; i < NumIdx; i++)
+        {
+            Triangles.Add((int32)Lonzo_Indices[i]);
+        }
+        LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
         LonzoModel->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
         LonzoModel->SetRelativeLocation(FVector(0, 0, -90));
-        LonzoModel->SetRelativeScale3D(FVector(1.0f));
         LonzoModel->RegisterComponent();
         if (BodyMesh)
         {
