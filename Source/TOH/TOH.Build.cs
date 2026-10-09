@@ -11,7 +11,10 @@ public class TOH : ModuleRules
             "CoreUObject",
             "Engine",
             "InputCore",
-            "EnhancedInput"
+            "EnhancedInput",
+            "ImageWrapper",
+            "RenderCore",
+            "RHI"
         });
 
         if (Target.Platform == UnrealTargetPlatform.Android)
