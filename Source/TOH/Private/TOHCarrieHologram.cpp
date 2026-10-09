@@ -28,19 +28,24 @@ ATOHCarrieHologram::ATOHCarrieHologram()
     GlowLight->SetAttenuationRadius(800.0f);
 
     Tags.Add(TEXT("Carrie"));
+
+    static ConstructorHelpers::FObjectFinder<UTexture2D> CarrieTexObj(TEXT("/Game/Textures/TOH_Carrie"));
+    if (CarrieTexObj.Succeeded())
+    {
+        CarrieTexture = CarrieTexObj.Object;
+    }
 }
 
 void ATOHCarrieHologram::BeginPlay()
 {
     Super::BeginPlay();
 
-    static ConstructorHelpers::FObjectFinder<UTexture2D> CarrieTex(TEXT("/Game/Textures/TOH_Carrie"));
     UMaterialInstanceDynamic* Mat = HologramPlane->CreateDynamicMaterialInstance(0);
     if (Mat)
     {
-        if (CarrieTex.Succeeded())
+        if (CarrieTexture)
         {
-            Mat->SetTextureParameterValue(TEXT("EmissiveColor"), CarrieTex.Object);
+            Mat->SetTextureParameterValue(TEXT("EmissiveColor"), CarrieTexture);
         }
         Mat->SetVectorParameterValue(TEXT("EmissiveColor"), FLinearColor(0.6f, 0.2f, 1.0f));
         Mat->SetScalarParameterValue(TEXT("EmissiveIntensity"), 2.0f);
