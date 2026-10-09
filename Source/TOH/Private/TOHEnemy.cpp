@@ -83,7 +83,7 @@ void ATOHEnemy::Attack()
     }
 }
 
-void ATOHEnemy::TakeDamage(float Amount)
+void ATOHEnemy::ApplyDamage(float Amount)
 {
     if (!IsAlive()) return;
     Health = FMath::Max(0.0f, Health - Amount);
