@@ -1,4 +1,5 @@
 using UnrealBuildTool;
+
 public class TOHTarget : TargetRules
 {
     public TOHTarget(TargetInfo Target) : base(Target)
