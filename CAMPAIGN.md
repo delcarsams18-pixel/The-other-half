@@ -1,6 +1,7 @@
 # THE OTHER HALF — Full Campaign Canvas
 
-## Premise (Lonzo's Lore)
+## Structure: OPEN WORLD
+Benway, Missouri is one continuous open world — all districts connected, free to explore. Missions unlock in story order but the player can roam anywhere. Districts stream in as the player travels.
 Benway, Missouri, 2526 — 500 years after collapse. Lonzo owns Pulse Plet Technologies. After an accident, half of Carrie's brain was replaced with robotics/AI — she kept her memories and gained telekinesis, mind-reading, and pulse blasts. Beezy (herb expert) was drugged and tricked into stealing a hard drive carrying Carrie's brain update. The villains used it to brainwash Carrie and built an army from Lonzo's stolen tech. Now Lonzo fights through Benway City to get her back.
 
 ## Act 1: Sparks in the Static
