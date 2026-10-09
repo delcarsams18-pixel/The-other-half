@@ -21,6 +21,17 @@ ATOHGameMode::ATOHGameMode()
 
     EnemyClass = ATOHEnemy::StaticClass();
     ProjectileClass = ATOHProjectile::StaticClass();
+
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMeshObj(TEXT("/Engine/BasicShapes/Cube"));
+    if (CubeMeshObj.Succeeded())
+    {
+        CubeMeshAsset = CubeMeshObj.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneMeshObj(TEXT("/Engine/BasicShapes/Plane"));
+    if (PlaneMeshObj.Succeeded())
+    {
+        PlaneMeshAsset = PlaneMeshObj.Object;
+    }
 }
 
 void ATOHGameMode::BeginPlay()
@@ -41,17 +52,13 @@ void ATOHGameMode::Tick(float DeltaTime)
 void ATOHGameMode::BuildDistrict()
 {
     UWorld* World = GetWorld();
-    if (!World) return;
-
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> CubeMesh(TEXT("/Engine/BasicShapes/Cube"));
-    static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneMesh(TEXT("/Engine/BasicShapes/Plane"));
-    if (!CubeMesh.Succeeded()) return;
+    if (!World || !CubeMeshAsset) return;
 
     auto MakeBox = [&](FVector Loc, FVector Scale, FLinearColor Color, float Emissive = 0.0f) -> AStaticMeshActor*
     {
         AStaticMeshActor* Box = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Loc, FRotator::ZeroRotator);
         UStaticMeshComponent* Comp = Box->GetStaticMeshComponent();
-        Comp->SetStaticMesh(CubeMesh.Object);
+        Comp->SetStaticMesh(CubeMeshAsset);
         Comp->SetWorldScale3D(Scale);
         Comp->SetMobility(EComponentMobility::Static);
         UMaterialInstanceDynamic* Mat = Comp->CreateDynamicMaterialInstance(0);
@@ -67,11 +74,11 @@ void ATOHGameMode::BuildDistrict()
         return Box;
     };
 
-    if (PlaneMesh.Succeeded())
+    if (PlaneMeshAsset)
     {
         AStaticMeshActor* Ground = World->SpawnActor<AStaticMeshActor>(AStaticMeshActor::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator);
         UStaticMeshComponent* GComp = Ground->GetStaticMeshComponent();
-        GComp->SetStaticMesh(PlaneMesh.Object);
+        GComp->SetStaticMesh(PlaneMeshAsset);
         GComp->SetWorldScale3D(FVector(60.0f, 60.0f, 1.0f));
         UMaterialInstanceDynamic* GMat = GComp->CreateDynamicMaterialInstance(0);
         if (GMat)
