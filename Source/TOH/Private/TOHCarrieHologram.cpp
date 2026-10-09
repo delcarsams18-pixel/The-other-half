@@ -73,7 +73,7 @@ void ATOHCarrieHologram::BeginPlay()
             Triangles.Add((int32)Carrie_Indices[i]);
         }
         CarrieModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
-        UMaterial* BaseMat = UMaterial::GetDefaultMaterial(MD_Surface);
+        UMaterial* BaseMat = UMaterial::GetDefaultMaterial(EMaterialDomain::MD_Surface);
         if (BaseMat)
         {
             CarrieModel->SetMaterial(0, BaseMat);
