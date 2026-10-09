@@ -70,7 +70,6 @@ void ATOHCharacter::Tick(float DeltaTime)
         APlayerController* PC = Cast<APlayerController>(Controller);
         if (PC)
         {
-            FVector2D ScreenSize;
             int32 SX = 0, SY = 0;
             PC->GetViewportSize(SX, SY);
             if (TouchStart.X < SX * 0.5f)
