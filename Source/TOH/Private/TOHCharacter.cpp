@@ -93,7 +93,7 @@ void ATOHCharacter::BeginPlay()
         TArray<int32> Triangles;
         TArray<FVector> Normals;
         TArray<FVector2D> UVs;
-        TArray<FColor> Colors;
+        TArray<FLinearColor> Colors;
         TArray<FProcMeshTangent> Tangents;
         
         int32 NumVerts = sizeof(Lonzo_Vertices) / sizeof(float) / 3;
@@ -102,7 +102,7 @@ void ATOHCharacter::BeginPlay()
             Vertices.Add(FVector(Lonzo_Vertices[i*3], Lonzo_Vertices[i*3+1], Lonzo_Vertices[i*3+2]));
             Normals.Add(FVector(0, 0, 1));
             UVs.Add(FVector2D(0, 0));
-            Colors.Add(FColor::White);
+            Colors.Add(FLinearColor::White);
             Tangents.Add(FProcMeshTangent(1, 0, 0));
         }
         int32 NumIdx = sizeof(Lonzo_Indices) / sizeof(uint32);
