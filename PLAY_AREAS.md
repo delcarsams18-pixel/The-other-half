@@ -3,7 +3,7 @@
 Setting: 500 years from now. Failed policies (2025-2070) → every country bankrupt (2070-2120) → The Long Static (2120-2400, no nations, only zones) → Benway, Missouri emerges from rubble (2400-2526). Map = all of Missouri reimagined, fictional. Bigger than GTA.
 
 ## District 1: Home Base District 7
-- **Theme:** Pulse Plet Technologies HQ, safe zone, neon-blue corporate
+- **Theme:** Pulse Plait Tech HQ, safe zone, neon-blue corporate
 - **Enemies:** None (tutorial zone)
 - **Objective:** Learn movement, shooting, meet squad
 - **Story:** Lonzo gears up, Operation Recover briefing
