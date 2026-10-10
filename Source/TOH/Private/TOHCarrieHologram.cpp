@@ -100,16 +100,8 @@ void ATOHCarrieHologram::BeginPlay()
         }
         for (int32 i = 0; i < GNumI; i++) GTris.Add((int32)CarrieGloves_Indices[i]);
         GlovesModel->CreateMeshSection_LinearColor(0, GVerts, GTris, GNormals, GUVs, GColors, GTangents, true);
-        UMaterialInstanceDynamic* GMat = GlovesModel->CreateDynamicMaterialInstance(0);
-        if (GMat) GMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.1f, 0.3f, 1.0f));
-    }
-        UMaterialInstanceDynamic* FixMat = UMaterialInstanceDynamic::Create(CarrieModel->GetMaterial(0), this);
-        if (FixMat)
-        {
-            FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.8f, 0.1f, 0.1f));
-            CarrieModel->SetMaterial(0, FixMat);
-        }
-        CarrieModel->SetRelativeLocation(FVector(0, 0, -50));
+}
+CarrieModel->SetRelativeLocation(FVector(0, 0, -50));
         if (HologramPlane)
         {
             HologramPlane->SetVisibility(false);
