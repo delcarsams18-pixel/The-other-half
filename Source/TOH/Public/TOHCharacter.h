@@ -75,6 +75,22 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UProceduralMeshComponent* RifleModel;
 
+    // Skeletal mesh (animated) - replaces procedural if loads successfully
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
+    class USkeletalMeshComponent* SkelMesh;
+
+    UPROPERTY(EditAnywhere, Category = "TOH|Animation")
+    class UAnimSequence* IdleAnim;
+
+    UPROPERTY(EditAnywhere, Category = "TOH|Animation")
+    class UAnimSequence* WalkAnim;
+
+    UPROPERTY(EditAnywhere, Category = "TOH|Animation")
+    class UAnimSequence* RunAnim;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
+    bool bUseSkeletal = false;
+
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
 
