@@ -162,11 +162,16 @@ void ATOHCharacter::BeginPlay()
             LonzoModel->SetMaterial(0, BaseMat.Object);
         }
 
-        // Create flip-book walk animation meshes (one per baked frame)
-        // These share topology but have different vertex positions per frame
-        for (int32 FrameIdx = 0; FrameIdx < LONZO_WALK_FRAMES; FrameIdx++)
+        // Create flip-book walk animation meshes (8 frames to avoid tablet crash)
+        // Using every 4th frame from the 32 baked frames
+        const int32 NumFlipFrames = 8;
+        for (int32 f = 0; f < NumFlipFrames; f++)
         {
-            UProceduralMeshComponent* FrameMesh = CreateDefaultSubobject<UProceduralMeshComponent>(*FString::Printf(TEXT("WalkFrame%d"), FrameIdx));
+            int32 FrameIdx = f * 4; // 0, 4, 8, 12, 16, 20, 24, 28
+            if (FrameIdx >= LONZO_WALK_FRAMES) break;
+            
+            UProceduralMeshComponent* FrameMesh = CreateDefaultSubobject<UProceduralMeshComponent>(*FString::Printf(TEXT("WalkFrame%d"), f));
+            if (!FrameMesh) continue;
             FrameMesh->SetupAttachment(RootComponent);
             
             // Build vertices for this frame from baked data
@@ -186,7 +191,7 @@ void ATOHCharacter::BeginPlay()
             {
                 FrameMesh->SetMaterial(0, BaseMat.Object);
             }
-            FrameMesh->SetVisibility(false); // Hidden by default
+            FrameMesh->SetVisibility(false);
             WalkFrameMeshes.Add(FrameMesh);
         }
         // Store topology for walk animation updates
@@ -246,7 +251,7 @@ void ATOHCharacter::Tick(float DeltaTime)
     // Flip-book walk animation: toggle mesh visibility
     FVector Vel = GetVelocity();
     float Speed = FVector(Vel.X, Vel.Y, 0.0f).Size();
-    if (Speed > 10.0f && WalkFrameMeshes.Num() == LONZO_WALK_FRAMES)
+    if (Speed > 10.0f && WalkFrameMeshes.Num() > 0)
     {
         // Walking: hide static mesh, show current frame
         if (LonzoModel) LonzoModel->SetVisibility(false);
@@ -262,7 +267,7 @@ void ATOHCharacter::Tick(float DeltaTime)
                 WalkFrameMeshes[WalkFrameIndex]->SetVisibility(false);
             }
             // Show next frame
-            WalkFrameIndex = (WalkFrameIndex + 1) % LONZO_WALK_FRAMES;
+            WalkFrameIndex = (WalkFrameIndex + 1) % WalkFrameMeshes.Num();
             if (WalkFrameMeshes.IsValidIndex(WalkFrameIndex))
             {
                 WalkFrameMeshes[WalkFrameIndex]->SetVisibility(true);
