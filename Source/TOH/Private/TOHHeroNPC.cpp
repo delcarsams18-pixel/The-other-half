@@ -16,6 +16,7 @@ ATOHHeroNPC::ATOHHeroNPC()
 void ATOHHeroNPC::BeginPlay()
 {
     Super::BeginPlay();
+    SpawnLoc = GetActorLocation();
 
     if (!HeroModel) return;
 
