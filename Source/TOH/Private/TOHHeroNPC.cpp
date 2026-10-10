@@ -95,8 +95,31 @@ void ATOHHeroNPC::BeginPlay()
 void ATOHHeroNPC::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-    // Gentle idle bob
     BobTime += DeltaTime;
-    FVector Loc = GetActorLocation();
-    // Bob is handled via relative location to avoid drifting
+    
+    // Wander around spawn point
+    if (!bHasTarget || FVector::Dist(GetActorLocation(), TargetLoc) < 100.0f)
+    {
+        // Pick new target near spawn
+        float Angle = FMath::RandRange(0.0f, 2.0f * PI);
+        float Dist = FMath::RandRange(200.0f, 800.0f);
+        TargetLoc = SpawnLoc + FVector(FMath::Cos(Angle) * Dist, FMath::Sin(Angle) * Dist, 0);
+        bHasTarget = true;
+    }
+    
+    // Move toward target
+    FVector MyLoc = GetActorLocation();
+    FVector Dir = (TargetLoc - MyLoc).GetSafeNormal();
+    Dir.Z = 0;
+    FVector NewLoc = MyLoc + Dir * 150.0f * DeltaTime;
+    NewLoc.Z = MyLoc.Z; // Keep height
+    SetActorLocation(NewLoc);
+    
+    // Face movement direction
+    if (Dir.SizeSquared() > 0.01f)
+    {
+        FRotator NewRot = Dir.Rotation();
+        NewRot.Pitch = 0; NewRot.Roll = 0;
+        SetActorRotation(NewRot);
+    }
 }
