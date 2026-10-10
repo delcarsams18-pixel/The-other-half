@@ -72,6 +72,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UProceduralMeshComponent* LonzoModel;
 
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
+    class UProceduralMeshComponent* RifleModel;
+
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
 
