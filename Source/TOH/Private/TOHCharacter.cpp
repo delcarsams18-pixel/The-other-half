@@ -155,6 +155,12 @@ void ATOHCharacter::BeginPlay()
             Triangles.Add((int32)Lonzo_Indices[i]);
         }
         LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+        // Set opaque material to fix translucency
+        static ConstructorHelpers::FObjectFinder<UMaterial> BaseMat(TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
+        if (BaseMat.Succeeded())
+        {
+            LonzoModel->SetMaterial(0, BaseMat.Object);
+        }
         // Store topology for walk animation updates
         LonzoTriangles = Triangles;
         LonzoNormals = Normals;
