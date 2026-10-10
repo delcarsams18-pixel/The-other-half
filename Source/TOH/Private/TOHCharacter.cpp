@@ -158,8 +158,12 @@ void ATOHCharacter::BeginPlay()
         UMaterialInstanceDynamic* RMat = RifleModel->CreateDynamicMaterialInstance(0);
         if (RMat) RMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.25f, 0.25f, 0.3f));
     }
-        UMaterialInstanceDynamic* FixMat = LonzoModel->CreateDynamicMaterialInstance(0);
-        if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.15f, 0.2f, 0.3f));
+        UMaterialInstanceDynamic* FixMat = UMaterialInstanceDynamic::Create(LonzoModel->GetMaterial(0), this);
+        if (FixMat)
+        {
+            FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.15f, 0.2f, 0.3f));
+            LonzoModel->SetMaterial(0, FixMat);
+        }
         LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
         if (BodyMesh)
         {
