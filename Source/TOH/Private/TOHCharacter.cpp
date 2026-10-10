@@ -321,7 +321,9 @@ void ATOHCharacter::Fire()
 
     if (!ProjectileClass) return;
 
-    FVector Muzzle = GetActorLocation() + GetActorForwardVector() * 80.0f + FVector(0, 0, 90);
+    // Muzzle at rifle tip (rifle is at 30,25,90 relative, barrel extends forward)
+    FVector RiflePos = GetActorLocation() + GetActorForwardVector() * 30.0f + GetActorRightVector() * 25.0f + FVector(0, 0, 90);
+    FVector Muzzle = RiflePos + GetActorForwardVector() * 120.0f;
     FRotator Dir = GetControlRotation();
     FActorSpawnParameters Params;
     Params.Owner = this;
