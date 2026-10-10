@@ -79,6 +79,8 @@ ATOHCharacter::ATOHCharacter()
     BodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMesh"));
     
     LonzoModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("LonzoModel"));
+    RifleModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("RifleModel"));
+    RifleModel->SetupAttachment(GetMesh());
     LonzoModel->SetupAttachment(GetMesh());
     static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMeshAsset(TEXT("/Engine/BasicShapes/Cube"));
     if (BodyMeshAsset.Succeeded())
@@ -126,6 +128,35 @@ void ATOHCharacter::BeginPlay()
             Triangles.Add((int32)Lonzo_Indices[i]);
         }
         LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+
+    // Build Lonzo's rifle
+    if (RifleModel)
+    {
+        TArray<FVector> RVerts;
+        TArray<int32> RTris;
+        TArray<FVector> RNormals;
+        TArray<FVector2D> RUVs;
+        TArray<FLinearColor> RColors;
+        TArray<FProcMeshTangent> RTangents;
+        int32 RNumV = sizeof(LonzoRifle_Vertices)/sizeof(float)/3;
+        int32 RNumI = sizeof(LonzoRifle_Indices)/sizeof(uint32);
+        for (int32 i = 0; i < RNumV; i++)
+        {
+            float GX = LonzoRifle_Vertices[i*3];
+            float GY = LonzoRifle_Vertices[i*3+1];
+            float GZ = LonzoRifle_Vertices[i*3+2];
+            // Position at right hand (30, 25, 90) like the old arm cannon
+            RVerts.Add(FVector(GX * 100.0f + 30.0f, -GZ * 100.0f + 25.0f, GY * 100.0f + 90.0f));
+            RNormals.Add(FVector(0, 0, 1));
+            RUVs.Add(FVector2D(0, 0));
+            RColors.Add(FLinearColor(0.25f, 0.25f, 0.3f));
+            RTangents.Add(FProcMeshTangent(1, 0, 0));
+        }
+        for (int32 i = 0; i < RNumI; i++) RTris.Add((int32)LonzoRifle_Indices[i]);
+        RifleModel->CreateMeshSection_LinearColor(0, RVerts, RTris, RNormals, RUVs, RColors, RTangents, true);
+        UMaterialInstanceDynamic* RMat = RifleModel->CreateDynamicMaterialInstance(0);
+        if (RMat) RMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.25f, 0.25f, 0.3f));
+    }
         UMaterialInstanceDynamic* FixMat = LonzoModel->CreateDynamicMaterialInstance(0);
         if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.15f, 0.2f, 0.3f));
         LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
