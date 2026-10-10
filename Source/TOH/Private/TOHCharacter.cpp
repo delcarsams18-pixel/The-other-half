@@ -19,6 +19,12 @@
 
 ATOHCharacter::ATOHCharacter()
 {
+    // Hard reference to skeletal mesh (ensures cooker includes it)
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> SkelRef(TEXT("/Game/Animations/Lonzo/Idle_10_zbyj.Idle_10_zbyj"));
+    if (SkelRef.Succeeded())
+    {
+        LonzoSkelMesh = SkelRef.Object;
+    }
     PrimaryActorTick.bCanEverTick = true;
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
@@ -97,23 +103,19 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    // Try loading skeletal mesh safely (runtime load, not constructor)
-    if (SkelMesh)
+    // Use hard-referenced skeletal mesh
+    if (SkelMesh && LonzoSkelMesh)
     {
-        USkeletalMesh* LoadedSkel = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/Animations/Lonzo/Idle_10_zbyj.Idle_10_zbyj"));
-        if (LoadedSkel)
-        {
-            SkelMesh->SetSkeletalMesh(LoadedSkel);
-            SkelMesh->SetVisibility(true);
-            bUseSkeletal = true;
-            if (LonzoModel) LonzoModel->SetVisibility(false);
-            if (RifleModel) RifleModel->SetVisibility(false);
-            UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh loaded successfully"));
-        }
-        else
-        {
-            UE_LOG(LogTemp, Warning, TEXT("TOH: Skeletal mesh failed to load, using procedural"));
-        }
+        SkelMesh->SetSkeletalMesh(LonzoSkelMesh);
+        SkelMesh->SetVisibility(true);
+        bUseSkeletal = true;
+        if (LonzoModel) LonzoModel->SetVisibility(false);
+        if (RifleModel) RifleModel->SetVisibility(false);
+        UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh set from hard reference"));
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("TOH: No skeletal mesh, using procedural"));
     }
 
     // Hide procedural gun parts (using 3D rifle model instead)
