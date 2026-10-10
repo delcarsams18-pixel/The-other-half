@@ -96,6 +96,12 @@ protected:
     bool bUseSkeletal = false;
     int32 WalkFrameIndex = 0;
     float WalkAnimTimer = 0.0f;
+    // Stored mesh topology for walk animation updates
+    TArray<int32> LonzoTriangles;
+    TArray<FVector> LonzoNormals;
+    TArray<FVector2D> LonzoUVs;
+    TArray<FLinearColor> LonzoColors;
+    TArray<FProcMeshTangent> LonzoTangents;
 
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
