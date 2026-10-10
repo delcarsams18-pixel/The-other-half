@@ -209,33 +209,7 @@ LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
 
 void ATOHCharacter::Tick(float DeltaTime)
 {
-    // Walk animation: cycle through baked frames when moving
-    FVector Vel = GetVelocity();
-    float Speed = FVector(Vel.X, Vel.Y, 0.0f).Size();
-    if (Speed > 10.0f && LonzoModel)
-    {
-        WalkAnimTimer += DeltaTime;
-        // 32 frames at ~24fps = 1.33 sec per cycle
-        float FrameTime = 1.0f / 24.0f;
-        if (WalkAnimTimer >= FrameTime)
-        {
-            WalkAnimTimer = 0.0f;
-            WalkFrameIndex = (WalkFrameIndex + 1) % LONZO_WALK_FRAMES;
-            
-            // Update mesh vertices with walk frame
-            TArray<FVector> NewVerts;
-            NewVerts.SetNum(LONZO_WALK_VERTS);
-            for (int32 i = 0; i < LONZO_WALK_VERTS; i++)
-            {
-                NewVerts[i] = FVector(
-                    LonzoWalkFrames[WalkFrameIndex][i][0] * 100.0f,
-                    LonzoWalkFrames[WalkFrameIndex][i][1] * 100.0f,
-                    LonzoWalkFrames[WalkFrameIndex][i][2] * 100.0f
-                );
-            }
-            LonzoModel->UpdateMeshSection_LinearColor(0, NewVerts, LonzoNormals, LonzoUVs, LonzoColors, LonzoTangents);
-        }
-    }
+    // Walk animation disabled - was breaking mesh rendering
     Super::Tick(DeltaTime);
 
     // Check for health pickups (distance-based)
