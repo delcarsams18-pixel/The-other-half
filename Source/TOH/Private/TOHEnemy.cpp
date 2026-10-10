@@ -119,8 +119,12 @@ void ATOHEnemy::BeginPlay()
                 Triangles.Add((int32)Idxs[i]);
             }
             GunModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
-        UMaterialInstanceDynamic* FixMat = GunModel->CreateDynamicMaterialInstance(0);
-        if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), GunColor);
+        UMaterialInstanceDynamic* FixMat = UMaterialInstanceDynamic::Create(GunModel->GetMaterial(0), this);
+        if (FixMat)
+        {
+            FixMat->SetVectorParameterValue(TEXT("BaseColor"), GunColor);
+            GunModel->SetMaterial(0, FixMat);
+        }
             GunModel->SetRelativeLocation(FVector(0, 0, -50));
             if (BodyMesh)
             {
