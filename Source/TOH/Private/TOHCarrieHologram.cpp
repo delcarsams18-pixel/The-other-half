@@ -1,4 +1,5 @@
 #include "TOHCarrieHologram.h"
+#include "CarrieGlovesMeshData.h"
 #include "TOHArtLoader.h"
 #include "TOHGLBLoader.h"
 #include "CarrieMeshData.h"
@@ -18,6 +19,8 @@ ATOHCarrieHologram::ATOHCarrieHologram()
     HologramPlane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HologramPlane"));
     
     CarrieModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("CarrieModel"));
+    GlovesModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("GlovesModel"));
+    GlovesModel->SetupAttachment(RootComponent);
     CarrieModel->SetupAttachment(RootComponent);
     static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneMesh(TEXT("/Engine/BasicShapes/Plane"));
     if (PlaneMesh.Succeeded())
@@ -72,6 +75,34 @@ void ATOHCarrieHologram::BeginPlay()
             Triangles.Add((int32)Carrie_Indices[i]);
         }
         CarrieModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+
+    // Build Carrie's gloves (blue, matching her core)
+    if (GlovesModel)
+    {
+        TArray<FVector> GVerts;
+        TArray<int32> GTris;
+        TArray<FVector> GNormals;
+        TArray<FVector2D> GUVs;
+        TArray<FLinearColor> GColors;
+        TArray<FProcMeshTangent> GTangents;
+        int32 GNumV = sizeof(CarrieGloves_Vertices)/sizeof(float)/3;
+        int32 GNumI = sizeof(CarrieGloves_Indices)/sizeof(uint32);
+        for (int32 i = 0; i < GNumV; i++)
+        {
+            float GX = CarrieGloves_Vertices[i*3];
+            float GY = CarrieGloves_Vertices[i*3+1];
+            float GZ = CarrieGloves_Vertices[i*3+2];
+            GVerts.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f + 120.0f));
+            GNormals.Add(FVector(0, 0, 1));
+            GUVs.Add(FVector2D(0, 0));
+            GColors.Add(FLinearColor(0.1f, 0.3f, 1.0f));
+            GTangents.Add(FProcMeshTangent(1, 0, 0));
+        }
+        for (int32 i = 0; i < GNumI; i++) GTris.Add((int32)CarrieGloves_Indices[i]);
+        GlovesModel->CreateMeshSection_LinearColor(0, GVerts, GTris, GNormals, GUVs, GColors, GTangents, true);
+        UMaterialInstanceDynamic* GMat = GlovesModel->CreateDynamicMaterialInstance(0);
+        if (GMat) GMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.1f, 0.3f, 1.0f));
+    }
         UMaterialInstanceDynamic* FixMat = CarrieModel->CreateDynamicMaterialInstance(0);
         if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.8f, 0.1f, 0.1f));
         CarrieModel->SetRelativeLocation(FVector(0, 0, -50));
