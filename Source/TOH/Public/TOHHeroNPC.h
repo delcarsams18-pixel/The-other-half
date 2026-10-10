@@ -26,4 +26,7 @@ protected:
     class UProceduralMeshComponent* HeroModel;
 
     float BobTime = 0.0f;
+    FVector SpawnLoc = FVector::ZeroVector;
+    FVector TargetLoc = FVector::ZeroVector;
+    bool bHasTarget = false;
 };
