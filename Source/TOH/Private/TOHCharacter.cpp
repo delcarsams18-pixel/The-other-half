@@ -178,16 +178,8 @@ void ATOHCharacter::BeginPlay()
         }
         for (int32 i = 0; i < RNumI; i++) RTris.Add((int32)LonzoRifle_Indices[i]);
         RifleModel->CreateMeshSection_LinearColor(0, RVerts, RTris, RNormals, RUVs, RColors, RTangents, true);
-        UMaterialInstanceDynamic* RMat = RifleModel->CreateDynamicMaterialInstance(0);
-        if (RMat) RMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.25f, 0.25f, 0.3f));
-    }
-        UMaterialInstanceDynamic* FixMat = UMaterialInstanceDynamic::Create(LonzoModel->GetMaterial(0), this);
-        if (FixMat)
-        {
-            FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.15f, 0.2f, 0.3f));
-            LonzoModel->SetMaterial(0, FixMat);
-        }
-        LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
+}
+LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
         if (BodyMesh)
         {
             BodyMesh->SetVisibility(false);
