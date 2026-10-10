@@ -243,7 +243,43 @@ LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
 
 void ATOHCharacter::Tick(float DeltaTime)
 {
-    // Walk animation disabled - was breaking mesh rendering
+    // Flip-book walk animation: toggle mesh visibility
+    FVector Vel = GetVelocity();
+    float Speed = FVector(Vel.X, Vel.Y, 0.0f).Size();
+    if (Speed > 10.0f && WalkFrameMeshes.Num() == LONZO_WALK_FRAMES)
+    {
+        // Walking: hide static mesh, show current frame
+        if (LonzoModel) LonzoModel->SetVisibility(false);
+        
+        WalkAnimTimer += DeltaTime;
+        float FrameTime = 1.0f / 24.0f;
+        if (WalkAnimTimer >= FrameTime)
+        {
+            WalkAnimTimer = 0.0f;
+            // Hide previous frame
+            if (WalkFrameMeshes.IsValidIndex(WalkFrameIndex))
+            {
+                WalkFrameMeshes[WalkFrameIndex]->SetVisibility(false);
+            }
+            // Show next frame
+            WalkFrameIndex = (WalkFrameIndex + 1) % LONZO_WALK_FRAMES;
+            if (WalkFrameMeshes.IsValidIndex(WalkFrameIndex))
+            {
+                WalkFrameMeshes[WalkFrameIndex]->SetVisibility(true);
+            }
+        }
+    }
+    else
+    {
+        // Not walking: show static mesh, hide all frames
+        if (LonzoModel) LonzoModel->SetVisibility(true);
+        for (auto* FrameMesh : WalkFrameMeshes)
+        {
+            if (FrameMesh) FrameMesh->SetVisibility(false);
+        }
+        WalkFrameIndex = 0;
+        WalkAnimTimer = 0.0f;
+    }
     Super::Tick(DeltaTime);
 
     // Check for health pickups (distance-based)
