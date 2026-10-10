@@ -97,29 +97,6 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    // Try loading skeletal mesh (animated)
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> SkelFinder(TEXT("/Game/Animations/Lonzo/Idle_10_zbyj"));
-    if (SkelFinder.Succeeded() && SkelMesh)
-    {
-        SkelMesh->SetSkeletalMesh(SkelFinder.Object);
-        SkelMesh->SetVisibility(true);
-        bUseSkeletal = true;
-        // Hide procedural mesh
-        if (LonzoModel) LonzoModel->SetVisibility(false);
-        if (RifleModel) RifleModel->SetVisibility(false);
-        
-        // Load animations
-        static ConstructorHelpers::FObjectFinder<UAnimSequence> IdleFinder(TEXT("/Game/Animations/Lonzo/Idle_10_zbyj"));
-        static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkFinder(TEXT("/Game/Animations/Lonzo/Walking_21_0keg"));
-        static ConstructorHelpers::FObjectFinder<UAnimSequence> RunFinder(TEXT("/Game/Animations/Lonzo/Run_Forward_29_zwjg"));
-        if (IdleFinder.Succeeded()) IdleAnim = IdleFinder.Object;
-        if (WalkFinder.Succeeded()) WalkAnim = WalkFinder.Object;
-        if (RunFinder.Succeeded()) RunAnim = RunFinder.Object;
-        
-        // Start with idle
-        if (IdleAnim) SkelMesh->PlayAnimation(IdleAnim, true);
-    }
-
     // Hide procedural gun parts (using 3D rifle model instead)
     if (ArmCannon) ArmCannon->SetVisibility(false);
     if (GunBody) GunBody->SetVisibility(false);
@@ -213,18 +190,6 @@ void ATOHCharacter::BeginPlay()
 void ATOHCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    // Update animation based on movement (if using skeletal)
-    if (bUseSkeletal && SkelMesh)
-    {
-        float Speed = GetVelocity().Size();
-        UAnimSequence* TargetAnim = IdleAnim;
-        if (Speed > 400.0f) TargetAnim = RunAnim;
-        else if (Speed > 50.0f) TargetAnim = WalkAnim;
-        
-        // Only change if different (avoid restarting every frame)
-        // Note: Simple check - in production use an AnimInstance
-    }
 
     // Check for health pickups (distance-based)
     if (Health < MaxHealth)
