@@ -72,6 +72,9 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UProceduralMeshComponent* LonzoModel;
+    // Flip-book walk animation: one mesh per baked frame
+    UPROPERTY()
+    TArray<UProceduralMeshComponent*> WalkFrameMeshes;
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UProceduralMeshComponent* RifleModel;
