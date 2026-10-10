@@ -94,6 +94,8 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
     bool bUseSkeletal = false;
+    int32 WalkFrameIndex = 0;
+    float WalkAnimTimer = 0.0f;
 
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
