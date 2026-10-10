@@ -47,10 +47,6 @@ ATOHCharacter::ATOHCharacter()
         ArmCannon->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f));
     }
     ArmCannon->SetupAttachment(GetMesh());
-    ArmCannon->SetVisibility(false);
-    GunBody->SetVisibility(false);
-    GunBarrel->SetVisibility(false);
-    GunGrip->SetVisibility(false);
 
     GunBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunBody"));
     GunBarrel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunBarrel"));
@@ -97,6 +93,11 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    // Hide procedural gun parts (using 3D rifle model instead)
+    if (ArmCannon) ArmCannon->SetVisibility(false);
+    if (GunBody) GunBody->SetVisibility(false);
+    if (GunBarrel) GunBarrel->SetVisibility(false);
+    if (GunGrip) GunGrip->SetVisibility(false);
     Health = MaxHealth;
 
     // Build Lonzo 3D model from embedded mesh data
