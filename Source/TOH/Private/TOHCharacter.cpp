@@ -1,4 +1,5 @@
 #include "TOHCharacter.h"
+#include "LonzoRifleMeshData.h"
 #include "Engine/StaticMeshActor.h"
 #include "EngineUtils.h"
 #include "TOHProjectile.h"
@@ -46,6 +47,10 @@ ATOHCharacter::ATOHCharacter()
         ArmCannon->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f));
     }
     ArmCannon->SetupAttachment(GetMesh());
+    ArmCannon->SetVisibility(false);
+    GunBody->SetVisibility(false);
+    GunBarrel->SetVisibility(false);
+    GunGrip->SetVisibility(false);
 
     GunBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunBody"));
     GunBarrel = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GunBarrel"));
