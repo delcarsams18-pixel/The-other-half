@@ -90,6 +90,66 @@ void ATOHHeroNPC::BeginPlay()
             Triangles.Add((int32)Idxs[i]);
         }
         HeroModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+        
+        // Build weapon mesh
+        const float* WVerts = nullptr;
+        const uint32* WIdxs = nullptr;
+        int32 WNumVerts = 0;
+        int32 WNumIdx = 0;
+        FVector WeaponOffset(50.0f, 30.0f, 100.0f); // Right hand area
+        float WeaponScale = 1.0f;
+        
+        switch (HeroType)
+        {
+        case 0: // PMac -> LGun
+            WVerts = LGun_Vertices; WIdxs = LGun_Indices;
+            WNumVerts = sizeof(LGun_Vertices)/sizeof(float)/3;
+            WNumIdx = sizeof(LGun_Indices)/sizeof(uint32);
+            break;
+        case 1: // BZ -> Backpack (on back)
+            WVerts = BZBackpack_Vertices; WIdxs = BZBackpack_Indices;
+            WNumVerts = sizeof(BZBackpack_Vertices)/sizeof(float)/3;
+            WNumIdx = sizeof(BZBackpack_Indices)/sizeof(uint32);
+            WeaponOffset = FVector(-40.0f, 0.0f, 140.0f); // On back
+            break;
+        case 2: // Adam -> BunnyGun
+            WVerts = AdamBunnyGun_Vertices; WIdxs = AdamBunnyGun_Indices;
+            WNumVerts = sizeof(AdamBunnyGun_Vertices)/sizeof(float)/3;
+            WNumIdx = sizeof(AdamBunnyGun_Indices)/sizeof(uint32);
+            break;
+        case 3: // Darrel -> Pistol
+            WVerts = DarrelPistol_Vertices; WIdxs = DarrelPistol_Indices;
+            WNumVerts = sizeof(DarrelPistol_Vertices)/sizeof(float)/3;
+            WNumIdx = sizeof(DarrelPistol_Indices)/sizeof(uint32);
+            WeaponScale = 1.5f;
+            break;
+        case 4: // BigNate -> no weapon
+            break;
+        }
+        
+        if (WVerts && WIdxs && WeaponModel)
+        {
+            TArray<FVector> WVertices;
+            TArray<int32> WTriangles;
+            TArray<FVector> WNormals;
+            TArray<FVector2D> WUVs;
+            TArray<FLinearColor> WColors;
+            TArray<FProcMeshTangent> WTangents;
+            for (int32 i = 0; i < WNumVerts; i++)
+            {
+                float GX = WVerts[i*3] * WeaponScale;
+                float GY = WVerts[i*3+1] * WeaponScale;
+                float GZ = WVerts[i*3+2] * WeaponScale;
+                WVertices.Add(FVector(GX * 100.0f, -GZ * 100.0f, GY * 100.0f) + WeaponOffset);
+                WNormals.Add(FVector(0, 0, 1));
+                WUVs.Add(FVector2D(0, 0));
+                WColors.Add(FLinearColor(0.3f, 0.3f, 0.35f));
+                WTangents.Add(FProcMeshTangent(1, 0, 0));
+            }
+            for (int32 i = 0; i < WNumIdx; i++) WTriangles.Add((int32)WIdxs[i]);
+            WeaponModel->CreateMeshSection_LinearColor(0, WVertices, WTriangles, WNormals, WUVs, WColors, WTangents, true);
+        }
+        
         // Use solid color material (not vertex colors which can appear transparent)
         UMaterialInstanceDynamic* HeroMat = HeroModel->CreateDynamicMaterialInstance(0);
         if (HeroMat)
