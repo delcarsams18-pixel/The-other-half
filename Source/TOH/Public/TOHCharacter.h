@@ -79,6 +79,10 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
     class USkeletalMeshComponent* SkelMesh;
 
+    // Hard reference to ensure cooker includes the asset
+    UPROPERTY(EditDefaultsOnly, Category = "TOH|Animation")
+    class USkeletalMesh* LonzoSkelMesh;
+
     UPROPERTY(EditAnywhere, Category = "TOH|Animation")
     class UAnimSequence* IdleAnim;
 
