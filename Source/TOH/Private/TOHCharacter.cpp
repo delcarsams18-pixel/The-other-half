@@ -121,6 +121,8 @@ void ATOHCharacter::BeginPlay()
             Triangles.Add((int32)Lonzo_Indices[i]);
         }
         LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+        UMaterialInstanceDynamic* FixMat = LonzoModel->CreateDynamicMaterialInstance(0);
+        if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.15f, 0.2f, 0.3f));
         LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
         if (BodyMesh)
         {
