@@ -5,12 +5,18 @@
 #include "AdamMeshData.h"
 #include "DarrelMeshData.h"
 #include "BigNateMeshData.h"
+#include "DarrelPistolMeshData.h"
+#include "AdamBunnyGunMeshData.h"
+#include "BZBackpackMeshData.h"
+#include "LGunMeshData.h"
 
 ATOHHeroNPC::ATOHHeroNPC()
 {
     PrimaryActorTick.bCanEverTick = true;
     HeroModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("HeroModel"));
     RootComponent = HeroModel;
+    WeaponModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("WeaponModel"));
+    WeaponModel->SetupAttachment(RootComponent);
 }
 
 void ATOHHeroNPC::BeginPlay()
