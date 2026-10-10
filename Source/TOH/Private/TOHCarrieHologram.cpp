@@ -72,6 +72,8 @@ void ATOHCarrieHologram::BeginPlay()
             Triangles.Add((int32)Carrie_Indices[i]);
         }
         CarrieModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+        UMaterialInstanceDynamic* FixMat = CarrieModel->CreateDynamicMaterialInstance(0);
+        if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.8f, 0.1f, 0.1f));
         CarrieModel->SetRelativeLocation(FVector(0, 0, -50));
         if (HologramPlane)
         {
