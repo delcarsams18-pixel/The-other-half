@@ -25,6 +25,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH")
     class UProceduralMeshComponent* HeroModel;
 
+    UPROPERTY(VisibleAnywhere, Category = "TOH")
+    class UProceduralMeshComponent* WeaponModel;
+
     float BobTime = 0.0f;
     FVector SpawnLoc = FVector::ZeroVector;
     FVector TargetLoc = FVector::ZeroVector;
