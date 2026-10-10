@@ -97,6 +97,25 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    // Try loading skeletal mesh safely (runtime load, not constructor)
+    if (SkelMesh)
+    {
+        USkeletalMesh* LoadedSkel = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/Animations/Lonzo/Idle_10_zbyj.Idle_10_zbyj"));
+        if (LoadedSkel)
+        {
+            SkelMesh->SetSkeletalMesh(LoadedSkel);
+            SkelMesh->SetVisibility(true);
+            bUseSkeletal = true;
+            if (LonzoModel) LonzoModel->SetVisibility(false);
+            if (RifleModel) RifleModel->SetVisibility(false);
+            UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh loaded successfully"));
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("TOH: Skeletal mesh failed to load, using procedural"));
+        }
+    }
+
     // Hide procedural gun parts (using 3D rifle model instead)
     if (ArmCannon) ArmCannon->SetVisibility(false);
     if (GunBody) GunBody->SetVisibility(false);
