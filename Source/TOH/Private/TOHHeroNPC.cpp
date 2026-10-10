@@ -83,6 +83,12 @@ void ATOHHeroNPC::BeginPlay()
             Triangles.Add((int32)Idxs[i]);
         }
         HeroModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+        // Use solid color material (not vertex colors which can appear transparent)
+        UMaterialInstanceDynamic* HeroMat = HeroModel->CreateDynamicMaterialInstance(0);
+        if (HeroMat)
+        {
+            HeroMat->SetVectorParameterValue(TEXT("BaseColor"), HeroColor);
+        }
     }
 }
 
