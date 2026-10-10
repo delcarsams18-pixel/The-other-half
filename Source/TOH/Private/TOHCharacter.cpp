@@ -155,6 +155,12 @@ void ATOHCharacter::BeginPlay()
             Triangles.Add((int32)Lonzo_Indices[i]);
         }
         LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
+        // Store topology for walk animation updates
+        LonzoTriangles = Triangles;
+        LonzoNormals = Normals;
+        LonzoUVs = UVs;
+        LonzoColors = Colors;
+        LonzoTangents = Tangents;
 
     // Build Lonzo's rifle
     if (RifleModel)
@@ -216,7 +222,7 @@ void ATOHCharacter::Tick(float DeltaTime)
             WalkAnimTimer = 0.0f;
             WalkFrameIndex = (WalkFrameIndex + 1) % LONZO_WALK_FRAMES;
             
-            // Update mesh vertices
+            // Update mesh vertices with walk frame
             TArray<FVector> NewVerts;
             NewVerts.SetNum(LONZO_WALK_VERTS);
             for (int32 i = 0; i < LONZO_WALK_VERTS; i++)
@@ -227,8 +233,7 @@ void ATOHCharacter::Tick(float DeltaTime)
                     LonzoWalkFrames[WalkFrameIndex][i][2] * 100.0f
                 );
             }
-            // Update the mesh section (keep existing indices/normals/UVs)
-            // Note: This is a simplified update - full implementation needs stored topology
+            LonzoModel->UpdateMeshSection_LinearColor(0, NewVerts, LonzoNormals, LonzoUVs, LonzoColors, LonzoTangents);
         }
     }
     Super::Tick(DeltaTime);
