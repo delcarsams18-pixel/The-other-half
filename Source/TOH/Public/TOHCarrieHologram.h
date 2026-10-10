@@ -27,4 +27,7 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "TOH")
     class UProceduralMeshComponent* CarrieModel;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH")
+    class UProceduralMeshComponent* GlovesModel;
 };
