@@ -161,6 +161,34 @@ void ATOHCharacter::BeginPlay()
         {
             LonzoModel->SetMaterial(0, BaseMat.Object);
         }
+
+        // Create flip-book walk animation meshes (one per baked frame)
+        // These share topology but have different vertex positions per frame
+        for (int32 FrameIdx = 0; FrameIdx < LONZO_WALK_FRAMES; FrameIdx++)
+        {
+            UProceduralMeshComponent* FrameMesh = CreateDefaultSubobject<UProceduralMeshComponent>(*FString::Printf(TEXT("WalkFrame%d"), FrameIdx));
+            FrameMesh->SetupAttachment(RootComponent);
+            
+            // Build vertices for this frame from baked data
+            TArray<FVector> FrameVerts;
+            FrameVerts.SetNum(LONZO_WALK_VERTS);
+            for (int32 i = 0; i < LONZO_WALK_VERTS; i++)
+            {
+                FrameVerts[i] = FVector(
+                    LonzoWalkFrames[FrameIdx][i][0] * 100.0f,
+                    LonzoWalkFrames[FrameIdx][i][1] * 100.0f,
+                    LonzoWalkFrames[FrameIdx][i][2] * 100.0f
+                );
+            }
+            
+            FrameMesh->CreateMeshSection_LinearColor(0, FrameVerts, Triangles, Normals, UVs, Colors, Tangents, true);
+            if (BaseMat.Succeeded())
+            {
+                FrameMesh->SetMaterial(0, BaseMat.Object);
+            }
+            FrameMesh->SetVisibility(false); // Hidden by default
+            WalkFrameMeshes.Add(FrameMesh);
+        }
         // Store topology for walk animation updates
         LonzoTriangles = Triangles;
         LonzoNormals = Normals;
