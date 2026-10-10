@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "TOHCharacter.generated.h"
 #include "ProceduralMeshComponent.h"
+#include "TOHCharacter.generated.h"
 
 UCLASS()
 class TOH_API ATOHCharacter : public ACharacter
