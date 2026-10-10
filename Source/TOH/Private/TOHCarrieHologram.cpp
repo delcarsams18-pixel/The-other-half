@@ -103,8 +103,12 @@ void ATOHCarrieHologram::BeginPlay()
         UMaterialInstanceDynamic* GMat = GlovesModel->CreateDynamicMaterialInstance(0);
         if (GMat) GMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.1f, 0.3f, 1.0f));
     }
-        UMaterialInstanceDynamic* FixMat = CarrieModel->CreateDynamicMaterialInstance(0);
-        if (FixMat) FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.8f, 0.1f, 0.1f));
+        UMaterialInstanceDynamic* FixMat = UMaterialInstanceDynamic::Create(CarrieModel->GetMaterial(0), this);
+        if (FixMat)
+        {
+            FixMat->SetVectorParameterValue(TEXT("BaseColor"), FLinearColor(0.8f, 0.1f, 0.1f));
+            CarrieModel->SetMaterial(0, FixMat);
+        }
         CarrieModel->SetRelativeLocation(FVector(0, 0, -50));
         if (HologramPlane)
         {
