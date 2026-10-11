@@ -21,10 +21,12 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh DISABLED for startup crash diagnosis.
-    // Reverting to last known good (procedural) to isolate the issue.
-    // static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
-    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
+    // Skeletal mesh: Lonzo's real mesh at the path it expects (/Game/skeloton/)
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
+    if (LonzoMeshRef.Succeeded())
+    {
+        LonzoSkelMeshAsset = LonzoMeshRef.Object;
+    }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
