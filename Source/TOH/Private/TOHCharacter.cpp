@@ -121,7 +121,7 @@ void ATOHCharacter::BeginPlay()
         SkelMesh->SetVisibility(true);
         bUseSkeletal = true;
         if (LonzoModel) LonzoModel->SetVisibility(false);
-        if (RifleModel) RifleModel->SetVisibility(false);
+        // RifleModel stays visible in skeletal mode too: every hero carries their own weapon.
         // Play idle by default; walk anim swaps in Tick based on speed
         if (LonzoIdleAnimAsset)
         {
@@ -205,8 +205,7 @@ void ATOHCharacter::BeginPlay()
         }
         for (int32 i = 0; i < RNumI; i++) RTris.Add((int32)LonzoRifle_Indices[i]);
         RifleModel->CreateMeshSection_LinearColor(0, RVerts, RTris, RNormals, RUVs, RColors, RTangents, true);
-}
-LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
+        LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
         if (BodyMesh)
         {
             BodyMesh->SetVisibility(false);
