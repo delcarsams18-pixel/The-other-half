@@ -21,12 +21,8 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh: Lonzo's real mesh (loaded via cook)
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
-    if (LonzoMeshRef.Succeeded())
-    {
-        LonzoSkelMeshAsset = LonzoMeshRef.Object;
-    }
+    // Skeletal mesh loaded in BeginPlay (not constructor) to avoid Editor crash on bad assets
+    LonzoSkelMeshAsset = nullptr;
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
@@ -104,8 +100,21 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
+    // Load Lonzo's skeletal mesh safely at runtime (not in constructor)
+    // If the asset is missing or corrupted, we fall back to procedural - no crash
+    if (!LonzoSkelMeshAsset)
+    {
+        LonzoSkelMeshAsset = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/skeloton/Lonzo.Lonzo"));
+        if (LonzoSkelMeshAsset)
+        {
+            UE_LOG(LogTemp, Log, TEXT("TOH: Loaded Lonzo skeletal mesh"));
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("TOH: Could not load Lonzo skeletal mesh, using procedural fallback"));
+        }
+    }
     // Use Lonzo's real skeletal assets if they loaded.
-    // Skeletons are now at the paths the animations expect.
     if (SkelMesh && LonzoSkelMeshAsset)
     {
         SkelMesh->SetSkeletalMesh(LonzoSkelMeshAsset);
@@ -391,3 +400,4 @@ void ATOHCharacter::ApplyDamage(float Amount)
         GetCharacterMovement()->DisableMovement();
     }
 }
+
