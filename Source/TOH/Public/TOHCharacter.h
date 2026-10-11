@@ -81,14 +81,17 @@ protected:
     class USkeletalMeshComponent* SkelMesh;
 
     // Hard references to Lonzo's real imported assets
+    // DISABLED: The .uasset animations reference a skeleton from the blank
+    // MyProject import; the reference doesn't resolve in TOH's cook.
+    // .uassets remain on GitHub for proper skeleton fix tomorrow.
     UPROPERTY()
-    class USkeletalMesh* LonzoSkelMeshAsset;
+    class USkeletalMesh* LonzoSkelMeshAsset = nullptr;
 
     UPROPERTY()
-    class UAnimSequence* LonzoWalkAnimAsset;
+    class UAnimSequence* LonzoWalkAnimAsset = nullptr;
 
     UPROPERTY()
-    class UAnimSequence* LonzoIdleAnimAsset;
+    class UAnimSequence* LonzoIdleAnimAsset = nullptr;
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
     bool bUseSkeletal = false;
