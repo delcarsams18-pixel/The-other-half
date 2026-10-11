@@ -21,10 +21,16 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh loading DISABLED — the .uasset crashes the tablet on load.
-    // It's likely import metadata, not a renderable skeletal mesh.
-    // Procedural mesh is the stable path until a real skinned mesh .uasset exists.
-    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
+    // Skeletal mesh: Lonzo's real imported mesh (verified to have bones)
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Characters/Lonzo/Skeletal/Lonzo_170_ivnz.Lonzo_170_ivnz"));
+    if (LonzoMeshRef.Succeeded())
+    {
+        LonzoSkelMeshAsset = LonzoMeshRef.Object;
+    }
+    // Animations disabled for now — they reference a different skeleton
+    // and need retargeting in the Editor before they can play on this mesh.
+    // if (WalkAnimRef.Succeeded()) { LonzoWalkAnimAsset = WalkAnimRef.Object; }
+    // if (IdleAnimRef.Succeeded()) { LonzoIdleAnimAsset = IdleAnimRef.Object; }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
