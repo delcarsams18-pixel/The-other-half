@@ -21,7 +21,7 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh: Lonzo's real mesh (complete and validated)
+    // Skeletal mesh: Lonzo's real mesh (loaded via cook)
     static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
     if (LonzoMeshRef.Succeeded())
     {
