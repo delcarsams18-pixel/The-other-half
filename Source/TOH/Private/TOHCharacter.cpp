@@ -21,24 +21,10 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal asset loading: skeletons are now at the paths the animations expect.
-    // If the mesh .uasset contains renderable data, skeletal animation activates.
-    // Otherwise falls back to procedural (no crash).
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg.Walking_21_0keg"));
-    if (LonzoMeshRef.Succeeded())
-    {
-        LonzoSkelMeshAsset = LonzoMeshRef.Object;
-    }
-    static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
-    if (WalkAnimRef.Succeeded())
-    {
-        LonzoWalkAnimAsset = WalkAnimRef.Object;
-    }
-    static ConstructorHelpers::FObjectFinder<UAnimSequence> IdleAnimRef(TEXT("/Game/Animations/Lonzo/Idle_0_q1o8_Anim.Idle_0_q1o8_Anim"));
-    if (IdleAnimRef.Succeeded())
-    {
-        LonzoIdleAnimAsset = IdleAnimRef.Object;
-    }
+    // Skeletal mesh loading DISABLED — the .uasset crashes the tablet on load.
+    // It's likely import metadata, not a renderable skeletal mesh.
+    // Procedural mesh is the stable path until a real skinned mesh .uasset exists.
+    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
