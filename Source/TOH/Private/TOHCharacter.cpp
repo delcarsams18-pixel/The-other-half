@@ -1,7 +1,5 @@
 #include "TOHCharacter.h"
-#include "LonzoWalkAnim.h"
 #include "LonzoRifleMeshData.h"
-#include "Animation/AnimSequence.h"
 #include "Engine/StaticMeshActor.h"
 #include "EngineUtils.h"
 #include "TOHProjectile.h"
@@ -20,12 +18,6 @@
 
 ATOHCharacter::ATOHCharacter()
 {
-    // Hard reference to skeletal mesh (ensures cooker includes it)
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> SkelRef(TEXT("/Game/Animations/Lonzo/Idle_10_zbyj.Idle_10_zbyj"));
-    if (SkelRef.Succeeded())
-    {
-        LonzoSkelMesh = SkelRef.Object;
-    }
     PrimaryActorTick.bCanEverTick = true;
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
@@ -104,19 +96,11 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    // Use hard-referenced skeletal mesh
-    if (SkelMesh && LonzoSkelMesh)
+    // Skeletal mesh wiring comes after Lonzo's skinned mesh .uasset exists.
+    // For now the procedural LonzoModel (opaque) is the visible body.
+    if (SkelMesh)
     {
-        SkelMesh->SetSkeletalMesh(LonzoSkelMesh);
-        SkelMesh->SetVisibility(true);
-        bUseSkeletal = true;
-        if (LonzoModel) LonzoModel->SetVisibility(false);
-        if (RifleModel) RifleModel->SetVisibility(false);
-        UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh set from hard reference"));
-    }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("TOH: No skeletal mesh, using procedural"));
+        SkelMesh->SetVisibility(false);
     }
 
     // Hide procedural gun parts (using 3D rifle model instead)
@@ -161,45 +145,7 @@ void ATOHCharacter::BeginPlay()
         {
             LonzoModel->SetMaterial(0, BaseMat.Object);
         }
-
-        // Create flip-book walk animation meshes (8 frames to avoid tablet crash)
-        // Using every 4th frame from the 32 baked frames
-        const int32 NumFlipFrames = 8;
-        for (int32 f = 0; f < NumFlipFrames; f++)
-        {
-            int32 FrameIdx = f * 4; // 0, 4, 8, 12, 16, 20, 24, 28
-            if (FrameIdx >= LONZO_WALK_FRAMES) break;
-            
-            UProceduralMeshComponent* FrameMesh = CreateDefaultSubobject<UProceduralMeshComponent>(*FString::Printf(TEXT("WalkFrame%d"), f));
-            if (!FrameMesh) continue;
-            FrameMesh->SetupAttachment(RootComponent);
-            
-            // Build vertices for this frame from baked data
-            TArray<FVector> FrameVerts;
-            FrameVerts.SetNum(LONZO_WALK_VERTS);
-            for (int32 i = 0; i < LONZO_WALK_VERTS; i++)
-            {
-                FrameVerts[i] = FVector(
-                    LonzoWalkFrames[FrameIdx][i][0] * 100.0f,
-                    LonzoWalkFrames[FrameIdx][i][1] * 100.0f,
-                    LonzoWalkFrames[FrameIdx][i][2] * 100.0f
-                );
-            }
-            
-            FrameMesh->CreateMeshSection_LinearColor(0, FrameVerts, Triangles, Normals, UVs, Colors, Tangents, true);
-            if (BaseMat.Succeeded())
-            {
-                FrameMesh->SetMaterial(0, BaseMat.Object);
-            }
-            FrameMesh->SetVisibility(false);
-            WalkFrameMeshes.Add(FrameMesh);
-        }
-        // Store topology for walk animation updates
-        LonzoTriangles = Triangles;
-        LonzoNormals = Normals;
-        LonzoUVs = UVs;
-        LonzoColors = Colors;
-        LonzoTangents = Tangents;
+    }
 
     // Build Lonzo's rifle
     if (RifleModel)
@@ -248,43 +194,6 @@ LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
 
 void ATOHCharacter::Tick(float DeltaTime)
 {
-    // Flip-book walk animation: toggle mesh visibility
-    FVector Vel = GetVelocity();
-    float Speed = FVector(Vel.X, Vel.Y, 0.0f).Size();
-    if (Speed > 10.0f && WalkFrameMeshes.Num() > 0)
-    {
-        // Walking: hide static mesh, show current frame
-        if (LonzoModel) LonzoModel->SetVisibility(false);
-        
-        WalkAnimTimer += DeltaTime;
-        float FrameTime = 1.0f / 24.0f;
-        if (WalkAnimTimer >= FrameTime)
-        {
-            WalkAnimTimer = 0.0f;
-            // Hide previous frame
-            if (WalkFrameMeshes.IsValidIndex(WalkFrameIndex))
-            {
-                WalkFrameMeshes[WalkFrameIndex]->SetVisibility(false);
-            }
-            // Show next frame
-            WalkFrameIndex = (WalkFrameIndex + 1) % WalkFrameMeshes.Num();
-            if (WalkFrameMeshes.IsValidIndex(WalkFrameIndex))
-            {
-                WalkFrameMeshes[WalkFrameIndex]->SetVisibility(true);
-            }
-        }
-    }
-    else
-    {
-        // Not walking: show static mesh, hide all frames
-        if (LonzoModel) LonzoModel->SetVisibility(true);
-        for (auto* FrameMesh : WalkFrameMeshes)
-        {
-            if (FrameMesh) FrameMesh->SetVisibility(false);
-        }
-        WalkFrameIndex = 0;
-        WalkAnimTimer = 0.0f;
-    }
     Super::Tick(DeltaTime);
 
     // Check for health pickups (distance-based)
