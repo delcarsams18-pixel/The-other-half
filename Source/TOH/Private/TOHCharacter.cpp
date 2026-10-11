@@ -21,12 +21,12 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh DISABLED — crashes on tablet (mesh or skeleton .uasset is invalid).
-    // Back to stable procedural until the .uasset issue is diagnosed.
-    // static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Characters/Lonzo/Skeletal/Lonzo_170_ivnz.Lonzo_170_ivnz"));
-    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
-    // static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
-    // if (WalkAnimRef.Succeeded()) { LonzoWalkAnimAsset = WalkAnimRef.Object; }
+    // Skeletal mesh: Lonzo's real mesh at the path it expects (/Game/skeloton/)
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
+    if (LonzoMeshRef.Succeeded())
+    {
+        LonzoSkelMeshAsset = LonzoMeshRef.Object;
+    }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
