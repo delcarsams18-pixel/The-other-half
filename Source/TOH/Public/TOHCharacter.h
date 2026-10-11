@@ -80,6 +80,23 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
     class USkeletalMeshComponent* SkelMesh;
 
+    // Hard references to Lonzo's real imported assets
+    UPROPERTY()
+    class USkeletalMesh* LonzoSkelMeshAsset;
+
+    UPROPERTY()
+    class UAnimSequence* LonzoWalkAnimAsset;
+
+    UPROPERTY()
+    class UAnimSequence* LonzoIdleAnimAsset;
+
+    UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
+    bool bUseSkeletal = false;
+
+    // Currently playing animation (to avoid restarting every tick)
+    UPROPERTY()
+    class UAnimSequence* CurrentAnimAsset = nullptr;
+
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
 
