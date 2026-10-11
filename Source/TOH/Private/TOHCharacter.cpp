@@ -1,5 +1,6 @@
 #include "TOHCharacter.h"
 #include "LonzoRifleMeshData.h"
+#include "Animation/AnimSequence.h"
 #include "Engine/StaticMeshActor.h"
 #include "EngineUtils.h"
 #include "TOHProjectile.h"
@@ -19,6 +20,23 @@
 ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
+
+    // Try to load Lonzo's real skeletal assets (imported on Shadow PC)
+    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg.Walking_21_0keg"));
+    if (LonzoMeshRef.Succeeded())
+    {
+        LonzoSkelMeshAsset = LonzoMeshRef.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
+    if (WalkAnimRef.Succeeded())
+    {
+        LonzoWalkAnimAsset = WalkAnimRef.Object;
+    }
+    static ConstructorHelpers::FObjectFinder<UAnimSequence> IdleAnimRef(TEXT("/Game/Animations/Lonzo/Idle_0_q1o8_Anim.Idle_0_q1o8_Anim"));
+    if (IdleAnimRef.Succeeded())
+    {
+        LonzoIdleAnimAsset = IdleAnimRef.Object;
+    }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
@@ -96,11 +114,26 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    // Skeletal mesh wiring comes after Lonzo's skinned mesh .uasset exists.
-    // For now the procedural LonzoModel (opaque) is the visible body.
-    if (SkelMesh)
+    // Use Lonzo's real skeletal assets if they loaded
+    if (SkelMesh && LonzoSkelMeshAsset)
     {
-        SkelMesh->SetVisibility(false);
+        SkelMesh->SetSkeletalMesh(LonzoSkelMeshAsset);
+        SkelMesh->SetVisibility(true);
+        bUseSkeletal = true;
+        if (LonzoModel) LonzoModel->SetVisibility(false);
+        if (RifleModel) RifleModel->SetVisibility(false);
+        // Play idle by default; walk anim swaps in Tick based on speed
+        if (LonzoIdleAnimAsset)
+        {
+            SkelMesh->PlayAnimation(LonzoIdleAnimAsset, true);
+        }
+        UE_LOG(LogTemp, Log, TEXT("TOH: Real skeletal mesh active"));
+    }
+    else
+    {
+        // Fallback: procedural LonzoModel (opaque, stable)
+        if (SkelMesh) SkelMesh->SetVisibility(false);
+        UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh not found, using procedural"));
     }
 
     // Hide procedural gun parts (using 3D rifle model instead)
@@ -195,6 +228,19 @@ LonzoModel->SetRelativeLocation(FVector(0, 0, -50));
 void ATOHCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
+
+    // Swap skeletal animations based on movement speed
+    if (bUseSkeletal && SkelMesh)
+    {
+        FVector Vel = GetVelocity();
+        float Speed = FVector(Vel.X, Vel.Y, 0.0f).Size();
+        UAnimSequence* Desired = (Speed > 10.0f) ? LonzoWalkAnimAsset : LonzoIdleAnimAsset;
+        if (Desired && Desired != CurrentAnimAsset)
+        {
+            CurrentAnimAsset = Desired;
+            SkelMesh->PlayAnimation(Desired, true);
+        }
+    }
 
     // Check for health pickups (distance-based)
     if (Health < MaxHealth)
