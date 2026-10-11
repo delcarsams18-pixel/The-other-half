@@ -27,10 +27,13 @@ ATOHCharacter::ATOHCharacter()
     {
         LonzoSkelMeshAsset = LonzoMeshRef.Object;
     }
-    // Animations disabled for now — they reference a different skeleton
-    // and need retargeting in the Editor before they can play on this mesh.
-    // if (WalkAnimRef.Succeeded()) { LonzoWalkAnimAsset = WalkAnimRef.Object; }
-    // if (IdleAnimRef.Succeeded()) { LonzoIdleAnimAsset = IdleAnimRef.Object; }
+    // Test: Try the walk animation (skeleton compatibility test)
+    // If skeletons don't match, it just won't play (no crash).
+    static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
+    if (WalkAnimRef.Succeeded())
+    {
+        LonzoWalkAnimAsset = WalkAnimRef.Object;
+    }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
@@ -116,10 +119,12 @@ void ATOHCharacter::BeginPlay()
         SkelMesh->SetVisibility(true);
         bUseSkeletal = true;
         if (LonzoModel) LonzoModel->SetVisibility(false);
-        if (LonzoIdleAnimAsset)
+        // Test: Try playing walk (skeleton compatibility test)
+        if (LonzoWalkAnimAsset)
         {
-            SkelMesh->PlayAnimation(LonzoIdleAnimAsset, true);
-            CurrentAnimAsset = LonzoIdleAnimAsset;
+            SkelMesh->PlayAnimation(LonzoWalkAnimAsset, true);
+            CurrentAnimAsset = LonzoWalkAnimAsset;
+            UE_LOG(LogTemp, Log, TEXT("TOH: Testing walk animation on skeletal mesh"));
         }
         UE_LOG(LogTemp, Log, TEXT("TOH: Real skeletal mesh active"));
     }
