@@ -21,12 +21,10 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh: Lonzo's real mesh at the path it expects (/Game/skeloton/)
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
-    if (LonzoMeshRef.Succeeded())
-    {
-        LonzoSkelMeshAsset = LonzoMeshRef.Object;
-    }
+    // Skeletal mesh REMOVED — reverting to original working state.
+    // The intermittent crash is the original bug, not the skeletal assets.
+    // static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/skeloton/Lonzo.Lonzo"));
+    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
