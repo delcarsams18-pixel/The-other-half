@@ -21,19 +21,12 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Skeletal mesh: Lonzo's real imported mesh (verified to have bones)
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Characters/Lonzo/Skeletal/Lonzo_170_ivnz.Lonzo_170_ivnz"));
-    if (LonzoMeshRef.Succeeded())
-    {
-        LonzoSkelMeshAsset = LonzoMeshRef.Object;
-    }
-    // Test: Try the walk animation (skeleton compatibility test)
-    // If skeletons don't match, it just won't play (no crash).
-    static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
-    if (WalkAnimRef.Succeeded())
-    {
-        LonzoWalkAnimAsset = WalkAnimRef.Object;
-    }
+    // Skeletal mesh DISABLED — crashes on tablet (mesh or skeleton .uasset is invalid).
+    // Back to stable procedural until the .uasset issue is diagnosed.
+    // static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Characters/Lonzo/Skeletal/Lonzo_170_ivnz.Lonzo_170_ivnz"));
+    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
+    // static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
+    // if (WalkAnimRef.Succeeded()) { LonzoWalkAnimAsset = WalkAnimRef.Object; }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
