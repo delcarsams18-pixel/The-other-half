@@ -72,40 +72,13 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UProceduralMeshComponent* LonzoModel;
-    // Flip-book walk animation: one mesh per baked frame
-    UPROPERTY()
-    TArray<UProceduralMeshComponent*> WalkFrameMeshes;
 
     UPROPERTY(VisibleAnywhere, Category = "TOH|Visual")
     class UProceduralMeshComponent* RifleModel;
 
-    // Skeletal mesh (animated) - replaces procedural if loads successfully
+    // Skeletal mesh (animated) - wired up when Lonzo's skeletal mesh .uasset exists
     UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
     class USkeletalMeshComponent* SkelMesh;
-
-    // Hard reference to ensure cooker includes the asset
-    UPROPERTY(EditDefaultsOnly, Category = "TOH|Animation")
-    class USkeletalMesh* LonzoSkelMesh;
-
-    UPROPERTY(EditAnywhere, Category = "TOH|Animation")
-    class UAnimSequence* IdleAnim;
-
-    UPROPERTY(EditAnywhere, Category = "TOH|Animation")
-    class UAnimSequence* WalkAnim;
-
-    UPROPERTY(EditAnywhere, Category = "TOH|Animation")
-    class UAnimSequence* RunAnim;
-
-    UPROPERTY(VisibleAnywhere, Category = "TOH|Animation")
-    bool bUseSkeletal = false;
-    int32 WalkFrameIndex = 0;
-    float WalkAnimTimer = 0.0f;
-    // Stored mesh topology for walk animation updates
-    TArray<int32> LonzoTriangles;
-    TArray<FVector> LonzoNormals;
-    TArray<FVector2D> LonzoUVs;
-    TArray<FLinearColor> LonzoColors;
-    TArray<FProcMeshTangent> LonzoTangents;
 
     UFUNCTION()
     void OnTouchPressed(ETouchIndex::Type FingerIndex, FVector Location);
