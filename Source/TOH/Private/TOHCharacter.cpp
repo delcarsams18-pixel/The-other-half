@@ -21,22 +21,11 @@ ATOHCharacter::ATOHCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // Try to load Lonzo's real skeletal assets (imported on Shadow PC)
-    static ConstructorHelpers::FObjectFinder<USkeletalMesh> LonzoMeshRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg.Walking_21_0keg"));
-    if (LonzoMeshRef.Succeeded())
-    {
-        LonzoSkelMeshAsset = LonzoMeshRef.Object;
-    }
-    static ConstructorHelpers::FObjectFinder<UAnimSequence> WalkAnimRef(TEXT("/Game/Animations/Lonzo/Walking_21_0keg_Anim.Walking_21_0keg_Anim"));
-    if (WalkAnimRef.Succeeded())
-    {
-        LonzoWalkAnimAsset = WalkAnimRef.Object;
-    }
-    static ConstructorHelpers::FObjectFinder<UAnimSequence> IdleAnimRef(TEXT("/Game/Animations/Lonzo/Idle_0_q1o8_Anim.Idle_0_q1o8_Anim"));
-    if (IdleAnimRef.Succeeded())
-    {
-        LonzoIdleAnimAsset = IdleAnimRef.Object;
-    }
+    // Skeletal asset loading DISABLED for tonight's build.
+    // The .uasset animations were imported in a blank MyProject; their
+    // skeleton references don't resolve during TOH's cook (Error_UnknownCookFailure).
+    // .uassets stay on GitHub; proper skeleton fix happens tomorrow.
+    // if (LonzoMeshRef.Succeeded()) { LonzoSkelMeshAsset = LonzoMeshRef.Object; }
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
@@ -114,26 +103,14 @@ ATOHCharacter::ATOHCharacter()
 void ATOHCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    // Use Lonzo's real skeletal assets if they loaded
-    if (SkelMesh && LonzoSkelMeshAsset)
+    // Skeletal animation wiring is disabled for tonight's build.
+    // The .uasset animations were imported in a blank MyProject; their
+    // skeleton references don't resolve during TOH's cook.
+    // Procedural LonzoModel (opaque, stable) is the visible body.
+    bUseSkeletal = false;
+    if (SkelMesh)
     {
-        SkelMesh->SetSkeletalMesh(LonzoSkelMeshAsset);
-        SkelMesh->SetVisibility(true);
-        bUseSkeletal = true;
-        if (LonzoModel) LonzoModel->SetVisibility(false);
-        // RifleModel stays visible in skeletal mode too: every hero carries their own weapon.
-        // Play idle by default; walk anim swaps in Tick based on speed
-        if (LonzoIdleAnimAsset)
-        {
-            SkelMesh->PlayAnimation(LonzoIdleAnimAsset, true);
-        }
-        UE_LOG(LogTemp, Log, TEXT("TOH: Real skeletal mesh active"));
-    }
-    else
-    {
-        // Fallback: procedural LonzoModel (opaque, stable)
-        if (SkelMesh) SkelMesh->SetVisibility(false);
-        UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh not found, using procedural"));
+        SkelMesh->SetVisibility(false);
     }
 
     // Hide procedural gun parts (using 3D rifle model instead)
