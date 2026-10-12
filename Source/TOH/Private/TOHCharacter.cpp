@@ -26,6 +26,10 @@ ATOHCharacter::ATOHCharacter()
     // Skeletal mesh loaded in BeginPlay (not constructor) to avoid Editor crash on bad assets
     LonzoSkelMeshAsset = nullptr;
 
+    // Fix mesh orientation: ensure character stands upright (not lying sideways)
+    GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
+    GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
     CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
