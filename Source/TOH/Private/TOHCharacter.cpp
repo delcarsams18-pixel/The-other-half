@@ -132,7 +132,8 @@ void ATOHCharacter::BeginPlay()
         if (LonzoIdleAnimAsset) UE_LOG(LogTemp, Log, TEXT("TOH: Loaded Lonzo idle anim"));
     }
     // Use Lonzo's real skeletal assets if they loaded.
-    if (SkelMesh && LonzoSkelMeshAsset)
+    // NOTE: SkelMesh is not used (GetMesh() is the character mesh) - test the asset pointer only.
+    if (LonzoSkelMeshAsset)
     {
         GetMesh()->SetSkeletalMesh(LonzoSkelMeshAsset);
         GetMesh()->SetVisibility(true);
@@ -151,7 +152,7 @@ void ATOHCharacter::BeginPlay()
     {
         // Fallback: procedural LonzoModel (opaque, stable)
         bUseSkeletal = false;
-        if (SkelMesh) GetMesh()->SetVisibility(false);
+        GetMesh()->SetVisibility(false);
         UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh not found, using procedural"));
     }
 
@@ -248,7 +249,7 @@ void ATOHCharacter::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 
     // Swap skeletal animations based on movement speed
-    if (bUseSkeletal && SkelMesh)
+    if (bUseSkeletal)
     {
         FVector Vel = GetVelocity();
         float Speed = FVector(Vel.X, Vel.Y, 0.0f).Size();
