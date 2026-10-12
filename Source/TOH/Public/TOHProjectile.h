@@ -16,7 +16,7 @@ public:
     virtual void Tick(float DeltaTime) override;
 
     UPROPERTY(EditDefaultsOnly, Category = "TOH")
-    float Damage = 25.0f;
+    float Damage = 50.0f;
 
     UPROPERTY(EditDefaultsOnly, Category = "TOH")
     float Speed = 2500.0f;
