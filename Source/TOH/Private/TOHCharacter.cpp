@@ -28,7 +28,7 @@ ATOHCharacter::ATOHCharacter()
 
     // Fix mesh orientation: ensure character stands upright (not lying sideways)
     GetMesh()->SetRelativeRotation(FRotator(0.0f, -90.0f, 0.0f));
-    GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+    // Note: Do NOT set RelativeLocation - Character's GetMesh() already has correct offset by default
 
     GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
