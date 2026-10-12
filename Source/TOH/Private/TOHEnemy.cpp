@@ -25,7 +25,7 @@ ATOHEnemy::ATOHEnemy()
     {
         BodyMesh->SetStaticMesh(BodyMeshAsset.Object);
         BodyMesh->SetRelativeScale3D(FVector(1.2f, 1.2f, 1.8f));
-        BodyMesh->SetRelativeLocation(FVector(0.0f, 0.0f, -20.0f));
+        BodyMesh->SetRelativeLocation(FVector(0.0f, 0.0f, 90.0f)); // Fix: cube bottom at ground level
     }
     BodyMesh->SetupAttachment(GetMesh());
 
