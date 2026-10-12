@@ -82,9 +82,8 @@ ATOHCharacter::ATOHCharacter()
     
     LonzoModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("LonzoModel"));
     RifleModel = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("RifleModel"));
-    SkelMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkelMesh"));
-    SkelMesh->SetupAttachment(GetMesh());
-    SkelMesh->SetVisibility(false); // Hidden until we confirm it loads
+    // Use GetMesh() directly (Character's built-in skeletal mesh) - no separate SkelMesh needed
+    GetMesh()->SetVisibility(false); // Hidden until we confirm it loads
     RifleModel->SetupAttachment(GetMesh());
     RifleModel->SetRelativeLocation(FVector(30.0f, 25.0f, 90.0f));
     LonzoModel->SetupAttachment(GetMesh());
@@ -131,14 +130,14 @@ void ATOHCharacter::BeginPlay()
     // Use Lonzo's real skeletal assets if they loaded.
     if (SkelMesh && LonzoSkelMeshAsset)
     {
-        SkelMesh->SetSkeletalMesh(LonzoSkelMeshAsset);
-        SkelMesh->SetVisibility(true);
+        GetMesh()->SetSkeletalMesh(LonzoSkelMeshAsset);
+        GetMesh()->SetVisibility(true);
         bUseSkeletal = true;
         if (LonzoModel) LonzoModel->SetVisibility(false);
         // Test: Try playing walk (skeleton compatibility test)
         if (LonzoWalkAnimAsset)
         {
-            SkelMesh->PlayAnimation(LonzoWalkAnimAsset, true);
+            GetMesh()->PlayAnimation(LonzoWalkAnimAsset, true);
             CurrentAnimAsset = LonzoWalkAnimAsset;
             UE_LOG(LogTemp, Log, TEXT("TOH: Testing walk animation on skeletal mesh"));
         }
@@ -148,7 +147,7 @@ void ATOHCharacter::BeginPlay()
     {
         // Fallback: procedural LonzoModel (opaque, stable)
         bUseSkeletal = false;
-        if (SkelMesh) SkelMesh->SetVisibility(false);
+        if (SkelMesh) GetMesh()->SetVisibility(false);
         UE_LOG(LogTemp, Log, TEXT("TOH: Skeletal mesh not found, using procedural"));
     }
 
@@ -253,7 +252,7 @@ void ATOHCharacter::Tick(float DeltaTime)
         if (Desired && Desired != CurrentAnimAsset)
         {
             CurrentAnimAsset = Desired;
-            SkelMesh->PlayAnimation(Desired, true);
+            GetMesh()->PlayAnimation(Desired, true);
         }
     }
 
