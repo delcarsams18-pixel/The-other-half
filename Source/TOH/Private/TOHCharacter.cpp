@@ -187,11 +187,11 @@ void ATOHCharacter::BeginPlay()
             Triangles.Add((int32)Lonzo_Indices[i]);
         }
         LonzoModel->CreateMeshSection_LinearColor(0, Vertices, Triangles, Normals, UVs, Colors, Tangents, true);
-        // Set opaque material to fix translucency
-        static ConstructorHelpers::FObjectFinder<UMaterial> BaseMat(TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
-        if (BaseMat.Succeeded())
+        // Set opaque material to fix translucency (safe LoadObject, not FObjectFinder)
+        UMaterial* BaseMat = LoadObject<UMaterial>(nullptr, TEXT("/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"));
+        if (BaseMat)
         {
-            LonzoModel->SetMaterial(0, BaseMat.Object);
+            LonzoModel->SetMaterial(0, BaseMat);
         }
     }
 
