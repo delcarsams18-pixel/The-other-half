@@ -123,7 +123,7 @@ void ATOHCharacter::BeginPlay()
     // Load Lonzo's walk and idle animations (safe runtime load)
     if (!LonzoWalkAnimAsset)
     {
-        LonzoWalkAnimAsset = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Animations/Lonzo/Unarmed_Walk_F_d_5_mi8a_Anim.Unarmed_Walk_F_d_5_mi8a_Anim"));
+        LonzoWalkAnimAsset = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Animations/Lonzo/Unarmed_Walk_Forward_5_mi8a_Anim.Unarmed_Walk_Forward_5_mi8a_Anim"));
         if (LonzoWalkAnimAsset) UE_LOG(LogTemp, Log, TEXT("TOH: Loaded Lonzo walk anim"));
     }
     if (!LonzoIdleAnimAsset)
