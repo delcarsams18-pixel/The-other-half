@@ -114,6 +114,17 @@ void ATOHCharacter::BeginPlay()
             UE_LOG(LogTemp, Warning, TEXT("TOH: Could not load Lonzo skeletal mesh, using procedural fallback"));
         }
     }
+    // Load Lonzo's walk and idle animations (safe runtime load)
+    if (!LonzoWalkAnimAsset)
+    {
+        LonzoWalkAnimAsset = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Animations/Lonzo/Unarmed_Walk_Forward_5_mi8a_Anim.Unarmed_Walk_Forward_5_mi8a_Anim"));
+        if (LonzoWalkAnimAsset) UE_LOG(LogTemp, Log, TEXT("TOH: Loaded Lonzo walk anim"));
+    }
+    if (!LonzoIdleAnimAsset)
+    {
+        LonzoIdleAnimAsset = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Animations/Lonzo/Idle_5_gxhw_Anim.Idle_5_gxhw_Anim"));
+        if (LonzoIdleAnimAsset) UE_LOG(LogTemp, Log, TEXT("TOH: Loaded Lonzo idle anim"));
+    }
     // Use Lonzo's real skeletal assets if they loaded.
     if (SkelMesh && LonzoSkelMeshAsset)
     {
