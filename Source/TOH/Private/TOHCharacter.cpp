@@ -1,6 +1,7 @@
 #include "TOHCharacter.h"
 #include "LonzoRifleMeshData.h"
 #include "Animation/AnimSequence.h"
+#include "Engine/SkeletalMesh.h"
 #include "Engine/StaticMeshActor.h"
 #include "EngineUtils.h"
 #include "TOHProjectile.h"
