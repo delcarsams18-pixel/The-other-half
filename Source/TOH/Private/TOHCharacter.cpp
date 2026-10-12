@@ -86,6 +86,7 @@ ATOHCharacter::ATOHCharacter()
     SkelMesh->SetupAttachment(GetMesh());
     SkelMesh->SetVisibility(false); // Hidden until we confirm it loads
     RifleModel->SetupAttachment(GetMesh());
+    RifleModel->SetRelativeLocation(FVector(30.0f, 25.0f, 90.0f));
     LonzoModel->SetupAttachment(GetMesh());
     static ConstructorHelpers::FObjectFinder<UStaticMesh> BodyMeshAsset(TEXT("/Engine/BasicShapes/Cube"));
     if (BodyMeshAsset.Succeeded())
