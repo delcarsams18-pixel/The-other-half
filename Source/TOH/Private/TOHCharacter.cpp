@@ -136,6 +136,7 @@ void ATOHCharacter::BeginPlay()
     if (LonzoSkelMeshAsset)
     {
         GetMesh()->SetSkeletalMesh(LonzoSkelMeshAsset);
+        GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -15.0f)); // Lower mesh to ground
         GetMesh()->SetVisibility(true);
         bUseSkeletal = true;
         if (LonzoModel) LonzoModel->SetVisibility(false);
