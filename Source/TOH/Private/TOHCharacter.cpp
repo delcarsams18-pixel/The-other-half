@@ -110,7 +110,7 @@ void ATOHCharacter::BeginPlay()
     // If the asset is missing or corrupted, we fall back to procedural - no crash
     if (!LonzoSkelMeshAsset)
     {
-        LonzoSkelMeshAsset = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/skeloton/Lonzo.Lonzo"));
+        LonzoSkelMeshAsset = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/Characters/Lonzo/Skeletal/Lonzo_Skeleton_169_yg6h.Lonzo_Skeleton_169_yg6h"));
         if (LonzoSkelMeshAsset)
         {
             UE_LOG(LogTemp, Log, TEXT("TOH: Loaded Lonzo skeletal mesh"));
